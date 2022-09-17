@@ -12,16 +12,11 @@ public class IndexModel : PageModel
         _logger = logger;
     }
 
-    /*public void OnGet()
-    {
-
-    }*/
-
     public IActionResult OnGet()
     {
         if (HttpContext.User.Identity.IsAuthenticated)
         {
-            return RedirectToPage("/Privacy");
+            return RedirectToPage("Main");
         }
         return Page();
     }
