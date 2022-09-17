@@ -1,0 +1,11 @@
+1. Enter your adress (seperately city name, street name and house name)
+2. Save adress info with user info in the database
+3. Select if you are searching or offering a thing to share
+4. Select what you want to share (washing machine or oven)
+5. Get a notification if there is a person in the same house that wants to share (at first in webpage, later through email as well)
+6. If you get a match, open a chat window
+
+optional extras:
+1. Show notifications for similar search results (eg. include if someone matches your search from neighboring house)
+2. Display a map from which to select your address
+3. Send/receive friend requests and have their contacts in a tab
