@@ -1,0 +1,27 @@
+﻿@page
+@model GreenLocator.Pages.EnterInfoModel
+@{
+}
+<h1>You have not yet entered correct address info</h1>
+<br /><br /><br />
+
+<article>
+    <h2>Please enter your city, street and house number here:</h2>
+    <br />
+
+    <form method="post">
+        <label for="CurrentUser">City:</label>
+        <input type="text" name="CityInput" placeholder="Enter city" maxlength="50">
+        <br /><br />
+
+        <label for="CurrentUser">Street:</label>
+        <input type="text" name="StreetInput" placeholder="Enter street" maxlength="50">
+        <br /><br />
+
+        <label for="CurrentUser">House:</label>
+        <input type="text" name="HouseInput" placeholder="Enter house number" maxlength="50">
+        <br /><br />
+        <input type="submit" value="Confirm">
+    </form>
+
+</article>
