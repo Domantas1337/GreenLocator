@@ -8,9 +8,16 @@ public class EnterInfoModel : PageModel
 {
     public UserInfo updateCurrentUser = new UserInfo();
 
-    public IActionResult OnGet()
+    public string CityInput, StreetInput;
+    public int HouseInput;
+
+    public IActionResult OnPost()
     {
-        try 
+        CityInput = Request.Form["CityInput"];
+        StreetInput = Request.Form["StreetInput"];
+        HouseInput = int.Parse(Request.Form["HouseInput"]);
+
+        try
         {
             string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;" +
                 "Initial Catalog=aspnet-GreenLocator-53bc9b9d-9d6a-45d4-8429-2a2761773502;Integrated Security=True;" +
@@ -20,12 +27,12 @@ public class EnterInfoModel : PageModel
             {
                 connection.Open();
                 string sql = "UPDATE AspNetUsers SET City = @cit, Street = @strt, house = @hs WHERE UserName = '" + User.Identity.Name + "'";
-                
+
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    updateCurrentUser.City = "Vilnius";     // Is textfieldu gautus duomenis ivedat cia
-                    updateCurrentUser.Street = "gatve";
-                    updateCurrentUser.house = 3;
+                    updateCurrentUser.City = CityInput;     // Is textfieldu gautus duomenis ivedat cia
+                    updateCurrentUser.Street = StreetInput;
+                    updateCurrentUser.house = HouseInput;
 
                     command.CommandText = sql;
 
@@ -51,5 +58,10 @@ public class EnterInfoModel : PageModel
         {
             return RedirectToPage("Error");
         }
+
     }
+    public void OnGet()
+    {
+    }
+
 }
