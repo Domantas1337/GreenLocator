@@ -1,3 +1,6 @@
+using GreenLocator.Models;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
@@ -10,50 +13,56 @@ public class MainModel : PageModel
 
     public IActionResult OnGet()
     {
-        try
+        using (var context = new GreenLocatorDBContext())
         {
-            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;" +
-                "Initial Catalog=aspnet-GreenLocator-53bc9b9d-9d6a-45d4-8429-2a2761773502;Integrated Security=True;" +
-                "Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;" +
-                "MultiSubnetFailover=False";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
-                string sql = "SELECT City, Street, house FROM AspNetUsers WHERE UserName = '" + User.Identity.Name + "'";
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                if(User.Identity.Name == null)
                 {
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    return RedirectToPage("Error");
+                }
+                AspNetUser? current = null;
+                foreach(var stud in context.AspNetUsers)
+                {
+                    if (stud.UserName == User.Identity.Name)
                     {
-                        while (reader.Read())
-                        {
-                            currentUser.City = reader.GetString(0);
-                            currentUser.Street = reader.GetString(1);
-                            currentUser.house = reader.GetInt32(2);
-
-                            break;
-                        }
+                        current = stud;
+                        break;
                     }
                 }
+
+                if(current == null)
+                {
+                    return RedirectToPage("EnterInfo");
+                }
+                else
+                {
+                    currentUser.City = current.City;
+                    currentUser.Street = current.Street;
+                    currentUser.house = (int)current.House;
+
+                    return Page();
+                }
             }
-            return Page();
-        }
-        catch(System.InvalidOperationException ex)
-        {
-            return RedirectToPage("EnterInfo");
-        }
-        catch(System.Data.SqlTypes.SqlNullValueException ex)
-        {
-            return RedirectToPage("EnterInfo");
-        }
-        catch(Exception ex)
-        {
-            return RedirectToPage("Error");
+            catch (System.InvalidOperationException ex)
+            {
+                return RedirectToPage("EnterInfo");
+            }
+            catch (System.Data.SqlTypes.SqlNullValueException ex)
+            {
+                return RedirectToPage("EnterInfo");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToPage("Error");
+            }
+            
         }
     }
 }
 
 public class UserInfo{
-    public string City;
-    public string Street;
-    public int house;
+    public string? City;
+    public string? Street;
+    public int? house;
 }

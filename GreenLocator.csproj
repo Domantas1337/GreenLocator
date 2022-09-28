@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-GreenLocator-AD60DF83-2A7F-4367-8796-968598BEBA13</UserSecretsId>
+    <UserSecretsId>GreenLocatorDB</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
