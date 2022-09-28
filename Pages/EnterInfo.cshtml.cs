@@ -6,8 +6,6 @@ namespace GreenLocator.Pages;
 
 public class EnterInfoModel : PageModel
 {
-    public UserInfo updateCurrentUser = new UserInfo();
-
     public string CityInput, StreetInput;
     public int HouseInput;
 
@@ -22,7 +20,7 @@ public class EnterInfoModel : PageModel
             string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;" +
                 "Initial Catalog=aspnet-GreenLocator-53bc9b9d-9d6a-45d4-8429-2a2761773502;Integrated Security=True;" +
                 "Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;" +
-                "MultiSubnetFailover=False";
+                "MultiSubnetFailover=False"; // Pakeisti i entity framework
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -30,15 +28,11 @@ public class EnterInfoModel : PageModel
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    updateCurrentUser.City = CityInput;     // Is textfieldu gautus duomenis ivedat cia
-                    updateCurrentUser.Street = StreetInput;
-                    updateCurrentUser.house = HouseInput;
-
                     command.CommandText = sql;
 
-                    command.Parameters.AddWithValue("@cit", updateCurrentUser.City);
-                    command.Parameters.AddWithValue("@strt", updateCurrentUser.Street);
-                    command.Parameters.AddWithValue("@hs", updateCurrentUser.house);
+                    command.Parameters.AddWithValue("@cit", CityInput);
+                    command.Parameters.AddWithValue("@strt", StreetInput);
+                    command.Parameters.AddWithValue("@hs", HouseInput);
 
 
                     command.ExecuteNonQuery();
@@ -51,6 +45,10 @@ public class EnterInfoModel : PageModel
             return RedirectToPage("EnterInfo");
         }
         catch (System.Data.SqlTypes.SqlNullValueException ex)
+        {
+            return RedirectToPage("EnterInfo");
+        }
+        catch (System.FormatException ex)
         {
             return RedirectToPage("EnterInfo");
         }

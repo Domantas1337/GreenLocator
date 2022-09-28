@@ -29,6 +29,8 @@ public class MainModel : PageModel
                             currentUser.City = reader.GetString(0);
                             currentUser.Street = reader.GetString(1);
                             currentUser.house = reader.GetInt32(2);
+
+                            break;
                         }
                     }
                 }
