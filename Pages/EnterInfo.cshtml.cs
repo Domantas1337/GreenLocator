@@ -1,3 +1,5 @@
+using GreenLocator.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
@@ -17,28 +19,38 @@ public class EnterInfoModel : PageModel
 
         try
         {
-            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;" +
-                "Initial Catalog=aspnet-GreenLocator-53bc9b9d-9d6a-45d4-8429-2a2761773502;Integrated Security=True;" +
-                "Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;" +
-                "MultiSubnetFailover=False"; // Pakeisti i entity framework
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var context = new GreenLocatorDBContext())
             {
-                connection.Open();
-                string sql = "UPDATE AspNetUsers SET City = @cit, Street = @strt, house = @hs WHERE UserName = '" + User.Identity.Name + "'";
-
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                if (User.Identity.Name == null)
                 {
-                    command.CommandText = sql;
+                    return RedirectToPage("Error");
+                }
+                AspNetUser? current = null;
+                foreach (var stud in context.AspNetUsers)
+                {
+                    if (stud.UserName == User.Identity.Name)
+                    {
+                        current = stud;
+                        break;
+                    }
+                }
 
-                    command.Parameters.AddWithValue("@cit", CityInput);
-                    command.Parameters.AddWithValue("@strt", StreetInput);
-                    command.Parameters.AddWithValue("@hs", HouseInput);
+                if (current == null)
+                {
+                    return RedirectToPage("EnterInfo");
+                }
+                else
+                {
+                    current.City = CityInput;
+                    current.Street = StreetInput;
+                    current.House = HouseInput;
 
+                    context.SaveChanges();
 
-                    command.ExecuteNonQuery();
+                    return RedirectToPage("Main");
                 }
             }
-            return RedirectToPage("Main");
+
         }
         catch (System.InvalidOperationException ex)
         {
