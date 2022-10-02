@@ -10,9 +10,14 @@ namespace GreenLocator.Pages;
 public class MainModel : PageModel
 {
     public UserInfo currentUser = new UserInfo();
+    public string ActionInput, ApplianceInput;
 
     public IActionResult OnGet()
     {
+        //ActionInput = Request.Form["ActionInput"];
+        //ApplianceInput = Request.Form["ApplianceInput"];
+
+
         using (var context = new GreenLocatorDBContext())
         {
             try
@@ -40,6 +45,11 @@ public class MainModel : PageModel
                     currentUser.City = current.City;
                     currentUser.Street = current.Street;
                     currentUser.house = (int)current.House;
+
+                    /*if(current.BorrowOrShare)
+                    {
+                        
+                    }*/
 
                     return Page();
                 }
