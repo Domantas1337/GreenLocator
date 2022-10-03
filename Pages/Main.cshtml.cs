@@ -63,11 +63,26 @@ public class MainModel : PageModel
 
     public IActionResult OnPost()
     {
+        try
+        {
             ActionInput = Request.Form["ActionInput"];
             ApplianceInput = Request.Form["ApplianceInput"];
             Console.WriteLine(ActionInput);
             Console.WriteLine(ApplianceInput);
-            return Page();    
+            return Page();
+        }
+        catch (System.InvalidOperationException ex)
+        {
+            return RedirectToPage("EnterInfo");
+        }
+        catch (System.Data.SqlTypes.SqlNullValueException ex)
+        {
+            return RedirectToPage("EnterInfo");
+        }
+        catch (Exception ex)
+        {
+            return RedirectToPage("Error");
+        }
     }
 }
 
