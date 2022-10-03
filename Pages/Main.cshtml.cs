@@ -10,6 +10,8 @@ namespace GreenLocator.Pages;
 public class MainModel : PageModel
 {
     public UserInfo currentUser = new UserInfo();
+    public string ActionInput;
+    public string ApplianceInput;
 
     public IActionResult OnGet()
     {
@@ -40,7 +42,6 @@ public class MainModel : PageModel
                     currentUser.City = current.City;
                     currentUser.Street = current.Street;
                     currentUser.house = (int)current.House;
-
                     return Page();
                 }
             }
@@ -57,6 +58,30 @@ public class MainModel : PageModel
                 return RedirectToPage("Error");
             }
             
+        }
+    }
+
+    public IActionResult OnPost()
+    {
+        try
+        {
+            ActionInput = Request.Form["ActionInput"];
+            ApplianceInput = Request.Form["ApplianceInput"];
+            Console.WriteLine(ActionInput);
+            Console.WriteLine(ApplianceInput);
+            return Page();
+        }
+        catch (System.InvalidOperationException ex)
+        {
+            return RedirectToPage("EnterInfo");
+        }
+        catch (System.Data.SqlTypes.SqlNullValueException ex)
+        {
+            return RedirectToPage("EnterInfo");
+        }
+        catch (Exception ex)
+        {
+            return RedirectToPage("Error");
         }
     }
 }
