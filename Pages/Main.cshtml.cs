@@ -10,14 +10,11 @@ namespace GreenLocator.Pages;
 public class MainModel : PageModel
 {
     public UserInfo currentUser = new UserInfo();
-    public string ActionInput, ApplianceInput;
+    public string ActionInput;
+    public string ApplianceInput;
 
     public IActionResult OnGet()
     {
-        //ActionInput = Request.Form["ActionInput"];
-        //ApplianceInput = Request.Form["ApplianceInput"];
-
-
         using (var context = new GreenLocatorDBContext())
         {
             try
@@ -46,10 +43,11 @@ public class MainModel : PageModel
                     currentUser.Street = current.Street;
                     currentUser.house = (int)current.House;
 
-                    /*if(current.BorrowOrShare)
-                    {
-                        
-                    }*/
+                    //ActionInput = Request.Form["ActionInput"];
+                   // ApplianceInput = Request.Form["ApplianceInput"];
+                    //Console.WriteLine(ActionInput);
+                    //Console.WriteLine(ApplianceInput);
+
 
                     return Page();
                 }
@@ -68,6 +66,15 @@ public class MainModel : PageModel
             }
             
         }
+    }
+
+    public IActionResult OnPost()
+    {
+            ActionInput = Request.Form["ActionInput"];
+            ApplianceInput = Request.Form["ApplianceInput"];
+            Console.WriteLine(ActionInput);
+            Console.WriteLine(ApplianceInput);
+            return Page();    
     }
 }
 
