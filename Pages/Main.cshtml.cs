@@ -42,13 +42,6 @@ public class MainModel : PageModel
                     currentUser.City = current.City;
                     currentUser.Street = current.Street;
                     currentUser.house = (int)current.House;
-
-                    //ActionInput = Request.Form["ActionInput"];
-                   // ApplianceInput = Request.Form["ApplianceInput"];
-                    //Console.WriteLine(ActionInput);
-                    //Console.WriteLine(ApplianceInput);
-
-
                     return Page();
                 }
             }
