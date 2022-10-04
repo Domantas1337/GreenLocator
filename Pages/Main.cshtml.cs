@@ -67,8 +67,6 @@ public class MainModel : PageModel
         {
             ActionInput = Request.Form["ActionInput"];
             ApplianceInput = Request.Form["ApplianceInput"];
-            Console.WriteLine(ActionInput);
-            Console.WriteLine(ApplianceInput);
             return Page();
         }
         catch (System.InvalidOperationException ex)
