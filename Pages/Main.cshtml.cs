@@ -1,18 +1,17 @@
 using GreenLocator.Models;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data.SqlClient;
+
 
 namespace GreenLocator.Pages;
 
 public class MainModel : PageModel
 {
-    public UserInfo currentUser = new UserInfo();
+    public UserInfo currentUser = new();
 
-    public string ActionInput;
-    public string ApplianceInput;
+    public string? ActionInput;
+    public string? ApplianceInput;
 
     public readonly string[] StatusArr = { "Borrow", "Share" };
     public readonly string[] ThingArr = { "Washing machine", "Oven" };
@@ -23,7 +22,7 @@ public class MainModel : PageModel
         {
             try
             {
-                if(User.Identity.Name == null)
+                if(User.Identity == null)
                 {
                     return RedirectToPage("Error");
                 }
@@ -53,15 +52,15 @@ public class MainModel : PageModel
                     return Page();
                 }
             }
-            catch (System.InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 return RedirectToPage("EnterInfo");
             }
-            catch (System.Data.SqlTypes.SqlNullValueException ex)
+            catch (System.Data.SqlTypes.SqlNullValueException)
             {
                 return RedirectToPage("EnterInfo");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return RedirectToPage("Error");
             }
@@ -75,7 +74,7 @@ public class MainModel : PageModel
         { 
             using (var context = new GreenLocatorDBContext())
             {
-                if (User.Identity.Name == null)
+                if (User.Identity == null)
                 {
                     return RedirectToPage("Error");
                 }
@@ -84,7 +83,7 @@ public class MainModel : PageModel
                 {
                     if (stud.UserName == User.Identity.Name)
                     {
-                        current = stud;
+                        current = stud; // panaudot linq
                         break;
                     }
                 }
@@ -102,15 +101,15 @@ public class MainModel : PageModel
 
             return Page();
         }
-        catch (System.InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
             return RedirectToPage("EnterInfo");
         }
-        catch (System.Data.SqlTypes.SqlNullValueException ex)
+        catch (System.Data.SqlTypes.SqlNullValueException)
         {
             return RedirectToPage("EnterInfo");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return RedirectToPage("Error");
         }

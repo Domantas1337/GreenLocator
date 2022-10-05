@@ -14,10 +14,14 @@ public class IndexModel : PageModel
 
     public IActionResult OnGet()
     {
-        if (HttpContext.User.Identity.IsAuthenticated)
+        if (HttpContext.User.Identity != null)
         {
-            return RedirectToPage("Main");
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToPage("Main");
+            }
+            return Page();
         }
-        return Page();
+        return RedirectToPage("Error");
     }
 }
