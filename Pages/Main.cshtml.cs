@@ -11,8 +11,10 @@ public class MainModel : PageModel
 {
     public UserInfo currentUser = new UserInfo();
 
-    public readonly string[] StatusArr = { "Borrow", "Share" };
+    public string ActionInput;
+    public string ApplianceInput;
 
+    public readonly string[] StatusArr = { "Borrow", "Share" };
     public readonly string[] ThingArr = { "Washing machine", "Oven" };
 
     public IActionResult OnGet()

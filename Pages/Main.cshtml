@@ -3,9 +3,8 @@
 @{
     ViewData["Title"] = "Main window";
 }
-<p>Your current address info:</p>
 
-<h1>Select if you want to borrow, or share:</h1>
+<h2>Select if you want to borrow, or share:</h2>
     <form method="post">
 
     <select name="ActionInput">
@@ -14,7 +13,8 @@
             <option value="Share">Share</option>
         </select>
     
-<h1>Select the type of appliance:</h1>
+
+<h2>Select the type of appliance:</h2>
 
     <select name="ApplianceInput">
             <option value="">Select...</option>
@@ -22,7 +22,6 @@
         <option value="Oven">Oven</option>
         </select>
 
-<p></p>
     <input type="submit" value="Confirm">
     </form>
 
@@ -32,5 +31,5 @@
     <p>@Model.ThingArr[(int)Model.currentUser.ThingToShare]</p>
 }
 else{
-    <p>No options selected</p>
+    <p>options not selected</p>
 }
