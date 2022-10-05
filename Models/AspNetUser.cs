@@ -31,6 +31,8 @@ namespace GreenLocator.Models
         public string? City { get; set; }
         public string? Street { get; set; }
         public int? House { get; set; }
+        public int? ShareStatus { get; set; }
+        public int? ThingToShare { get; set; }
 
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
