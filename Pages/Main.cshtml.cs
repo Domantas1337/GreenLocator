@@ -10,8 +10,6 @@ namespace GreenLocator.Pages;
 public class MainModel : PageModel
 {
     public UserInfo currentUser = new UserInfo();
-    public string ActionInput;
-    public string ApplianceInput;
 
     public readonly string[] StatusArr = { "Borrow", "Share" };
 
@@ -46,8 +44,10 @@ public class MainModel : PageModel
                     currentUser.City = current.City;
                     currentUser.Street = current.Street;
                     currentUser.house = (int)current.House;
+
                     currentUser.ShareStatus = (int)current.ShareStatus;
                     currentUser.ThingToShare = (int)current.ThingToShare;
+
                     return Page();
                 }
             }
