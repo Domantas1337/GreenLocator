@@ -5,31 +5,33 @@
 }
 
 <h2>Select if you want to borrow, or share:</h2>
-    <form method="post">
+<form method="post">
 
     <select name="ActionInput">
-            <option value="">Select...</option>
-            <option value="Borrow">Borrow</option>
-            <option value="Share">Share</option>
-        </select>
-    
+        <option value="">Select...</option>
+        <option value="Borrow">Borrow</option>
+        <option value="Share">Share</option>
+    </select>
 
-<h2>Select the type of appliance:</h2>
+
+    <h2>Select the type of appliance:</h2>
 
     <select name="ApplianceInput">
-            <option value="">Select...</option>
+        <option value="">Select...</option>
         <option value="Washing machine">Washing machine</option>
         <option value="Oven">Oven</option>
-        </select>
+    </select>
 
     <input type="submit" value="Confirm">
-    </form>
+</form>
 
 <h2>Your current selection:</h2>
-@if(Model.currentUser.ShareStatus != null && Model.currentUser.ThingToShare != null){
+@if (Model.currentUser.ShareStatus != null && Model.currentUser.ThingToShare != null)
+{
     <p>@Model.StatusArr[(int)Model.currentUser.ShareStatus]</p>
     <p>@Model.ThingArr[(int)Model.currentUser.ThingToShare]</p>
 }
-else{
+else
+{
     <p>options not selected</p>
 }

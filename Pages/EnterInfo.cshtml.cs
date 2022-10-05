@@ -2,13 +2,12 @@ using GreenLocator.Models;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data.SqlClient;
 
 namespace GreenLocator.Pages;
 
 public class EnterInfoModel : PageModel
 {
-    public string CityInput, StreetInput;
+    public string? CityInput, StreetInput;
     public int HouseInput;
 
     public IActionResult OnPost()
@@ -21,7 +20,7 @@ public class EnterInfoModel : PageModel
         {
             using (var context = new GreenLocatorDBContext())
             {
-                if (User.Identity.Name == null)
+                if (User.Identity == null)
                 {
                     return RedirectToPage("Error");
                 }
@@ -52,19 +51,19 @@ public class EnterInfoModel : PageModel
             }
 
         }
-        catch (System.InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
             return RedirectToPage("EnterInfo");
         }
-        catch (System.Data.SqlTypes.SqlNullValueException ex)
+        catch (System.Data.SqlTypes.SqlNullValueException)
         {
             return RedirectToPage("EnterInfo");
         }
-        catch (System.FormatException ex)
+        catch (FormatException)
         {
             return RedirectToPage("EnterInfo");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return RedirectToPage("Error");
         }
