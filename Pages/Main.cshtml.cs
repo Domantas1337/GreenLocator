@@ -13,6 +13,10 @@ public class MainModel : PageModel
     public string ActionInput;
     public string ApplianceInput;
 
+    public readonly string[] StatusArr = { "Borrow", "Share" };
+
+    public readonly string[] ThingArr = { "Washing machine", "Oven" };
+
     public IActionResult OnGet()
     {
         using (var context = new GreenLocatorDBContext())
@@ -66,9 +70,34 @@ public class MainModel : PageModel
     public IActionResult OnPost()
     {
         try
-        {
-            ActionInput = Request.Form["ActionInput"];
-            ApplianceInput = Request.Form["ApplianceInput"];
+        { 
+            using (var context = new GreenLocatorDBContext())
+            {
+                if (User.Identity.Name == null)
+                {
+                    return RedirectToPage("Error");
+                }
+                AspNetUser? current = null;
+                foreach (var stud in context.AspNetUsers)
+                {
+                    if (stud.UserName == User.Identity.Name)
+                    {
+                        current = stud;
+                        break;
+                    }
+                }
+
+                ActionInput = Request.Form["ActionInput"];
+                ApplianceInput = Request.Form["ApplianceInput"];
+
+                setCurrentUser(ActionInput, ApplianceInput);
+
+                current.ShareStatus = currentUser.ShareStatus;
+                current.ThingToShare = currentUser.ThingToShare;
+
+                context.SaveChanges();
+            }
+
             return Page();
         }
         catch (System.InvalidOperationException ex)
@@ -84,12 +113,40 @@ public class MainModel : PageModel
             return RedirectToPage("Error");
         }
     }
+
+    private void setCurrentUser(string action, string appliance)
+    {
+
+        switch (action)
+        {
+            case "Borrow":
+                currentUser.ShareStatus = 0;
+                break;
+            case "Share":
+                currentUser.ShareStatus = 1;
+                break;
+            default:
+                break;
+        }
+
+        switch (appliance)
+        {
+            case "Washing machine":
+                currentUser.ThingToShare = 0;
+                break;
+            case "Oven":
+                currentUser.ThingToShare = 1;
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 public class UserInfo{
     public string? City;
     public string? Street;
     public int? house;
-    public int? ShareStatus;    // 0 - not sharing ; 1 - offering ; 2 - wants to receive
-    public int? ThingToShare;   // 0 - oven ; 1 - washing machine
+    public int? ShareStatus;    // 0 - wants to receive ; 1 - offering
+    public int? ThingToShare;   // 0 - washing machine ; 1 - oven
 }
