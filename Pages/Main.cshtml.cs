@@ -42,6 +42,8 @@ public class MainModel : PageModel
                     currentUser.City = current.City;
                     currentUser.Street = current.Street;
                     currentUser.house = (int)current.House;
+                    currentUser.ShareStatus = (int)current.ShareStatus;
+                    currentUser.ThingToShare = (int)current.ThingToShare;
                     return Page();
                 }
             }
@@ -88,4 +90,6 @@ public class UserInfo{
     public string? City;
     public string? Street;
     public int? house;
+    public int? ShareStatus;    // 0 - not sharing ; 1 - offering ; 2 - wants to receive
+    public int? ThingToShare;   // 0 - oven ; 1 - washing machine
 }
