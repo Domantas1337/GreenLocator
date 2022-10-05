@@ -10,9 +10,8 @@
     <select name="ActionInput">
         <option value="">Select...</option>
         <option value="Borrow">Borrow</option>
-        <option value="Share">Share</option>
+        <option value="Offer">Offer</option>
     </select>
-
 
     <h2>Select the type of appliance:</h2>
 
@@ -25,13 +24,15 @@
     <input type="submit" value="Confirm">
 </form>
 
+<br />
+
 <h2>Your current selection:</h2>
-@if (Model.currentUser.ShareStatus != null && Model.currentUser.ThingToShare != null)
+@if (Model.currentUser.ShareStatus != Status.NoValue && Model.currentUser.ThingToShare != Appliance.NoValue)
 {
-    <p>@Model.StatusArr[(int)Model.currentUser.ShareStatus]</p>
-    <p>@Model.ThingArr[(int)Model.currentUser.ThingToShare]</p>
+    <p>@Model.currentUser.ShareStatus</p>
+    <p>@Model.currentUser.ThingToShare</p>
 }
 else
 {
-    <p>options not selected</p>
+    <p>Not selected</p>
 }
