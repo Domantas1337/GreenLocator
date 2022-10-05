@@ -138,7 +138,7 @@ public class MainModel : PageModel
                 currentUser.ShareStatus = (Status) 1;
                 break;
 
-            case "Share":
+            case "Offer":
                 currentUser.ShareStatus = (Status) 2;
                 break;
 
