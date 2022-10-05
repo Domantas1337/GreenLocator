@@ -13,9 +13,6 @@ public class MainModel : PageModel
     public string? ActionInput;
     public string? ApplianceInput;
 
-    public readonly string[] StatusArr = { "Borrow", "Share" };
-    public readonly string[] ThingArr = { "Washing machine", "Oven" };
-
     public IActionResult OnGet()
     {
         using (var context = new GreenLocatorDBContext())
@@ -36,20 +33,30 @@ public class MainModel : PageModel
                     }
                 }
 
-                if(current == null)
-                {
-                    return RedirectToPage("EnterInfo");
-                }
-                else
+                if(current != null)
                 {
                     currentUser.City = current.City;
                     currentUser.Street = current.Street;
-                    currentUser.house = (int)current.House;
+                    currentUser.house = current.House;
 
-                    currentUser.ShareStatus = (int)current.ShareStatus;
-                    currentUser.ThingToShare = (int)current.ThingToShare;
+                    if (current.ShareStatus == null || current.ThingToShare == null)
+                    {
+                        current.ShareStatus = 0;
+                        current.ThingToShare = 0;
+
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        currentUser.ShareStatus = (Status)current.ShareStatus;
+                        currentUser.ThingToShare = (Appliance)current.ThingToShare;
+                    }
 
                     return Page();
+                }
+                else
+                {
+                    return RedirectToPage("EnterInfo");
                 }
             }
             catch (InvalidOperationException)
@@ -87,14 +94,21 @@ public class MainModel : PageModel
                         break;
                     }
                 }
+                if(current == null)
+                {
+                    return RedirectToPage("Error");
+                }
 
                 ActionInput = Request.Form["ActionInput"];
                 ApplianceInput = Request.Form["ApplianceInput"];
 
                 setCurrentUser(ActionInput, ApplianceInput);
 
-                current.ShareStatus = currentUser.ShareStatus;
-                current.ThingToShare = currentUser.ThingToShare;
+                if(current != null)
+                {
+                    current.ShareStatus = (int)currentUser.ShareStatus;
+                    current.ThingToShare = (int)currentUser.ThingToShare;
+                }
 
                 context.SaveChanges();
             }
@@ -121,11 +135,13 @@ public class MainModel : PageModel
         switch (action)
         {
             case "Borrow":
-                currentUser.ShareStatus = 0;
+                currentUser.ShareStatus = (Status) 1;
                 break;
+
             case "Share":
-                currentUser.ShareStatus = 1;
+                currentUser.ShareStatus = (Status) 2;
                 break;
+
             default:
                 break;
         }
@@ -133,21 +149,33 @@ public class MainModel : PageModel
         switch (appliance)
         {
             case "Washing machine":
-                currentUser.ThingToShare = 0;
+                currentUser.ThingToShare = (Appliance) 1;
                 break;
+
             case "Oven":
-                currentUser.ThingToShare = 1;
+                currentUser.ThingToShare = (Appliance) 2;
                 break;
+
             default:
                 break;
         }
     }
 }
 
+public enum Status
+{
+    NoValue, Borrow, Offer
+}
+
+public enum Appliance
+{
+    NoValue, WashingMachine, Oven
+}
+
 public class UserInfo{
     public string? City;
     public string? Street;
     public int? house;
-    public int? ShareStatus;    // 0 - wants to receive ; 1 - offering
-    public int? ThingToShare;   // 0 - washing machine ; 1 - oven
+    public Status ShareStatus;
+    public Appliance ThingToShare;
 }
