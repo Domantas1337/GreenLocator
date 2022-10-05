@@ -4,8 +4,6 @@
     ViewData["Title"] = "Main window";
 }
 <p>Your current address info:</p>
-<p>city=@Model.currentUser.City    Street=@Model.currentUser.Street    House=@Model.currentUser.house</p>
-
 
 <h1>Select if you want to borrow, or share:</h1>
     <form method="post">
@@ -21,10 +19,18 @@
     <select name="ApplianceInput">
             <option value="">Select...</option>
         <option value="Washing machine">Washing machine</option>
-        <option value="Microwave">Microwave</option>
+        <option value="Oven">Oven</option>
         </select>
 
-<h1>When ready, confirm your choices:</h1>
-
+<p></p>
     <input type="submit" value="Confirm">
     </form>
+
+<h2>Your current selection:</h2>
+@if(Model.currentUser.ShareStatus != null && Model.currentUser.ThingToShare != null){
+    <p>@Model.StatusArr[(int)Model.currentUser.ShareStatus]</p>
+    <p>@Model.ThingArr[(int)Model.currentUser.ThingToShare]</p>
+}
+else{
+    <p>No options selected</p>
+}
