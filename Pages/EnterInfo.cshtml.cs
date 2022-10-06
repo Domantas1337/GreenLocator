@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 using GreenLocator.Models;
 
 using Microsoft.AspNetCore.Mvc;
@@ -7,15 +9,15 @@ namespace GreenLocator.Pages;
 
 public class EnterInfoModel : PageModel
 {
-    public string? CityInput, StreetInput;
-    public int HouseInput;
+    [BindProperty]
+    public EnterInfoViewModel EnterInfoViewModel { get; set; }
 
     public IActionResult OnPost()
     {
-        CityInput = Request.Form["CityInput"];
-        StreetInput = Request.Form["StreetInput"];
-        HouseInput = int.Parse(Request.Form["HouseInput"]);
-
+        if (!ModelState.IsValid)
+        {
+            return Page();
+        }
         try
         {
             using (var context = new GreenLocatorDBContext())
@@ -40,9 +42,9 @@ public class EnterInfoModel : PageModel
                 }
                 else
                 {
-                    current.City = CityInput;
-                    current.Street = StreetInput;
-                    current.House = HouseInput;
+                    current.City = EnterInfoViewModel.CityInput;
+                    current.Street = EnterInfoViewModel.StreetInput;
+                    current.House = EnterInfoViewModel.HouseInput;
 
                     context.SaveChanges();
 
