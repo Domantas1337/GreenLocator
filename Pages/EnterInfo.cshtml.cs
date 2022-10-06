@@ -26,15 +26,11 @@ public class EnterInfoModel : PageModel
                 {
                     return RedirectToPage("Error");
                 }
-                AspNetUser? current = null;
-                foreach (var stud in context.AspNetUsers)
-                {
-                    if (stud.UserName == User.Identity.Name)
-                    {
-                        current = stud;
-                        break;
-                    }
-                }
+
+                var userList = from usr in context.AspNetUsers
+                               select usr;
+
+                AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
 
                 if (current == null)
                 {
@@ -42,8 +38,8 @@ public class EnterInfoModel : PageModel
                 }
                 else
                 {
-                    current.City = EnterInfoViewModel.CityInput;
-                    current.Street = EnterInfoViewModel.StreetInput;
+                    current.City = EnterInfoViewModel.CityInput ?? throw new ArgumentNullException();
+                    current.Street = EnterInfoViewModel.StreetInput ?? throw new ArgumentNullException();
                     current.House = EnterInfoViewModel.HouseInput;
 
                     context.SaveChanges();
@@ -57,11 +53,11 @@ public class EnterInfoModel : PageModel
         {
             return RedirectToPage("EnterInfo");
         }
-        catch (System.Data.SqlTypes.SqlNullValueException)
+        catch (FormatException)
         {
             return RedirectToPage("EnterInfo");
         }
-        catch (FormatException)
+        catch (ArgumentNullException)
         {
             return RedirectToPage("EnterInfo");
         }

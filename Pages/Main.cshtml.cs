@@ -3,6 +3,8 @@ using GreenLocator.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
+using System.Linq;
+
 
 namespace GreenLocator.Pages;
 
@@ -15,6 +17,7 @@ public class MainModel : PageModel
 
     public IActionResult OnGet()
     {
+
         using (var context = new GreenLocatorDBContext())
         {
             try
@@ -23,47 +26,37 @@ public class MainModel : PageModel
                 {
                     return RedirectToPage("Error");
                 }
-                AspNetUser? current = null;
-                foreach(var stud in context.AspNetUsers)
+
+                var userList = from usr in context.AspNetUsers
+                            select usr;
+
+                AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
+
+                currentUser.City = current.City ?? throw new ArgumentNullException();
+                currentUser.Street = current.Street ?? throw new ArgumentNullException();
+                currentUser.house = current.House ?? throw new ArgumentNullException();
+
+                if (current.ShareStatus == null || current.ThingToShare == null)
                 {
-                    if (stud.UserName == User.Identity.Name)
-                    {
-                        current = stud;
-                        break;
-                    }
-                }
+                    current.ShareStatus = 0;
+                    current.ThingToShare = 0;
 
-                if(current != null)
-                {
-                    currentUser.City = current.City;
-                    currentUser.Street = current.Street;
-                    currentUser.house = current.House;
-
-                    if (current.ShareStatus == null || current.ThingToShare == null)
-                    {
-                        current.ShareStatus = 0;
-                        current.ThingToShare = 0;
-
-                        context.SaveChanges();
-                    }
-                    else
-                    {
-                        currentUser.ShareStatus = (Status)current.ShareStatus;
-                        currentUser.ThingToShare = (Appliance)current.ThingToShare;
-                    }
-
-                    return Page();
+                    context.SaveChanges();
                 }
                 else
                 {
-                    return RedirectToPage("EnterInfo");
+                    currentUser.ShareStatus = (Status)current.ShareStatus;
+                    currentUser.ThingToShare = (Appliance)current.ThingToShare;
                 }
+
+                    return Page();
+
             }
             catch (InvalidOperationException)
             {
                 return RedirectToPage("EnterInfo");
             }
-            catch (System.Data.SqlTypes.SqlNullValueException)
+            catch (ArgumentNullException)
             {
                 return RedirectToPage("EnterInfo");
             }
@@ -85,30 +78,19 @@ public class MainModel : PageModel
                 {
                     return RedirectToPage("Error");
                 }
-                AspNetUser? current = null;
-                foreach (var stud in context.AspNetUsers)
-                {
-                    if (stud.UserName == User.Identity.Name)
-                    {
-                        current = stud; // panaudot linq
-                        break;
-                    }
-                }
-                if(current == null)
-                {
-                    return RedirectToPage("Error");
-                }
+
+                var userList = from usr in context.AspNetUsers
+                               select usr;
+
+                AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
 
                 ActionInput = Request.Form["ActionInput"];
                 ApplianceInput = Request.Form["ApplianceInput"];
 
                 setCurrentUser(ActionInput, ApplianceInput);
 
-                if(current != null)
-                {
-                    current.ShareStatus = (int)currentUser.ShareStatus;
-                    current.ThingToShare = (int)currentUser.ThingToShare;
-                }
+                current.ShareStatus = (int)currentUser.ShareStatus;
+                current.ThingToShare = (int)currentUser.ThingToShare;
 
                 context.SaveChanges();
             }
@@ -173,9 +155,9 @@ public enum Appliance
 }
 
 public class UserInfo{
-    public string? City;
-    public string? Street;
-    public int? house;
+    public string City = null;
+    public string Street = null;
+    public int house;
     public Status ShareStatus;
     public Appliance ThingToShare;
 }
