@@ -3,6 +3,8 @@ using GreenLocator.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
+using System.Linq;
+
 
 namespace GreenLocator.Pages;
 
@@ -15,6 +17,7 @@ public class MainModel : PageModel
 
     public IActionResult OnGet()
     {
+
         using (var context = new GreenLocatorDBContext())
         {
             try
@@ -24,7 +27,14 @@ public class MainModel : PageModel
                     return RedirectToPage("Error");
                 }
                 AspNetUser? current = null;
-                foreach(var stud in context.AspNetUsers)
+
+                var curr1 = from usr in context.AspNetUsers
+                           where usr.UserName == User.Identity.Name
+                           select usr;
+                curr1.Select(x => x.UserName);
+
+                
+                foreach (var stud in context.AspNetUsers)
                 {
                     if (stud.UserName == User.Identity.Name)
                     {
@@ -94,23 +104,23 @@ public class MainModel : PageModel
                         break;
                     }
                 }
-                if(current == null)
+                if(current != null)
+                {
+                    ActionInput = Request.Form["ActionInput"];
+                    ApplianceInput = Request.Form["ApplianceInput"];
+
+                    setCurrentUser(ActionInput, ApplianceInput);
+
+                    current.ShareStatus = (int)currentUser.ShareStatus;
+                    current.ThingToShare = (int)currentUser.ThingToShare;
+
+                    context.SaveChanges();
+                }
+                else
                 {
                     return RedirectToPage("Error");
                 }
 
-                ActionInput = Request.Form["ActionInput"];
-                ApplianceInput = Request.Form["ApplianceInput"];
-
-                setCurrentUser(ActionInput, ApplianceInput);
-
-                if(current != null)
-                {
-                    current.ShareStatus = (int)currentUser.ShareStatus;
-                    current.ThingToShare = (int)currentUser.ThingToShare;
-                }
-
-                context.SaveChanges();
             }
 
             return Page();
