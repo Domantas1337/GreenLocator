@@ -1,27 +1,70 @@
 ﻿@page
+@using GreenLocator.Models;
+@using Microsoft.AspNetCore.Mvc;
 @model GreenLocator.Pages.EnterInfoModel
 @{
 }
+@functions {
+    public string Values(string input)
+    {
+        using (var context = new GreenLocatorDBContext())
+        {
+            AspNetUser? current = null;
+            foreach (var stud in context.AspNetUsers)
+            {
+                if (stud.UserName == User.Identity.Name)
+                {
+                    current = stud;
+                    break;
+                }
+            }
+
+            if (input == "City")
+            {
+                return current.City;
+            }
+            else if (input == "Street")
+            {
+                return current.Street;
+            }
+            else
+            {
+                return current.House.ToString();
+            }
+        }
+    }
+}
 <h1>You have not yet entered correct address info</h1>
-<br /><br /><br />
+<br />
+<br />
+<br />
 
 <article>
     <h2>Please enter your city, street and house number here:</h2>
     <br />
 
     <form method="post">
-        <label for="CurrentUser">City:</label>
-        <input type="text" name="CityInput" placeholder="Enter city" maxlength="50">
-        <br /><br />
+        <div class="mb-3">
+            <label class="form-label">City</label>
+            <input type="text" asp-for="EnterInfoViewModel.CityInput" class="form-control" placeholder="Enter city" value=@Values("City") />
+            <span class="text-danger" asp-validation-for="EnterInfoViewModel.CityInput"></span>
+        </div>
 
-        <label for="CurrentUser">Street:</label>
-        <input type="text" name="StreetInput" placeholder="Enter street" maxlength="50">
-        <br /><br />
+        <div class="mb-3">
+            <label class="form-label">Street</label>
+            <input type="text" asp-for="EnterInfoViewModel.StreetInput" class="form-control" placeholder="Enter street" value=@Values("Street") />
+            <span class="text-danger" asp-validation-for="EnterInfoViewModel.StreetInput"></span>
+        </div>
 
-        <label for="CurrentUser">House:</label>
-        <input type="text" name="HouseInput" placeholder="Enter house number" maxlength="50">
-        <br /><br />
-        <input type="submit" value="Confirm">
+        <div class="mb-3">
+            <label class="form-label">House</label>
+            <input type="number" asp-for="EnterInfoViewModel.HouseInput" class="form-control" placeholder="Enter house number" value=@Values("House") />
+            <span class="text-danger" asp-validation-for="EnterInfoViewModel.HouseInput"></span>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary">Confirm</button>
+        </div>
     </form>
 
 </article>
