@@ -9,27 +9,48 @@
     {
         using (var context = new GreenLocatorDBContext())
         {
-            AspNetUser? current = null;
-            foreach (var stud in context.AspNetUsers)
+            if(User.Identity == null)
             {
-                if (stud.UserName == User.Identity.Name)
-                {
-                    current = stud;
-                    break;
-                }
+                return "error";
             }
+
+            var userList = from usr in context.AspNetUsers
+                           select usr;
+
+            AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
 
             if (input == "City")
             {
-                return current.City;
+                if(current.City != null){
+                    return current.City;
+                }
+                else
+                {
+                    return "null";
+                }
             }
             else if (input == "Street")
             {
-                return current.Street;
+                if(current.Street != null)
+                {
+                    return current.Street;
+                }
+                else
+                {
+                    return "null";
+                }
+
             }
             else
             {
-                return current.House.ToString();
+                if(current.House != null)
+                {
+                    return current.House.ToString();
+                }
+                else
+                {
+                    return "null";
+                }
             }
         }
     }

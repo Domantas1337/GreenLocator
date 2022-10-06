@@ -26,48 +26,31 @@ public class MainModel : PageModel
                 {
                     return RedirectToPage("Error");
                 }
-                AspNetUser? current = null;
 
-                var curr1 = from usr in context.AspNetUsers
-                           where usr.UserName == User.Identity.Name
-                           select usr;
-                curr1.Select(x => x.UserName);
+                var userList = from usr in context.AspNetUsers
+                            select usr;
 
-                
-                foreach (var stud in context.AspNetUsers)
+                AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
+
+                currentUser.City = current.City;
+                currentUser.Street = current.Street;
+                currentUser.house = current.House;
+
+                if (current.ShareStatus == null || current.ThingToShare == null)
                 {
-                    if (stud.UserName == User.Identity.Name)
-                    {
-                        current = stud;
-                        break;
-                    }
-                }
+                    current.ShareStatus = 0;
+                    current.ThingToShare = 0;
 
-                if(current != null)
-                {
-                    currentUser.City = current.City;
-                    currentUser.Street = current.Street;
-                    currentUser.house = current.House;
-
-                    if (current.ShareStatus == null || current.ThingToShare == null)
-                    {
-                        current.ShareStatus = 0;
-                        current.ThingToShare = 0;
-
-                        context.SaveChanges();
-                    }
-                    else
-                    {
-                        currentUser.ShareStatus = (Status)current.ShareStatus;
-                        currentUser.ThingToShare = (Appliance)current.ThingToShare;
-                    }
-
-                    return Page();
+                    context.SaveChanges();
                 }
                 else
                 {
-                    return RedirectToPage("EnterInfo");
+                    currentUser.ShareStatus = (Status)current.ShareStatus;
+                    currentUser.ThingToShare = (Appliance)current.ThingToShare;
                 }
+
+                    return Page();
+
             }
             catch (InvalidOperationException)
             {
@@ -95,32 +78,21 @@ public class MainModel : PageModel
                 {
                     return RedirectToPage("Error");
                 }
-                AspNetUser? current = null;
-                foreach (var stud in context.AspNetUsers)
-                {
-                    if (stud.UserName == User.Identity.Name)
-                    {
-                        current = stud; // panaudot linq
-                        break;
-                    }
-                }
-                if(current != null)
-                {
-                    ActionInput = Request.Form["ActionInput"];
-                    ApplianceInput = Request.Form["ApplianceInput"];
 
-                    setCurrentUser(ActionInput, ApplianceInput);
+                var userList = from usr in context.AspNetUsers
+                               select usr;
 
-                    current.ShareStatus = (int)currentUser.ShareStatus;
-                    current.ThingToShare = (int)currentUser.ThingToShare;
+                AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
 
-                    context.SaveChanges();
-                }
-                else
-                {
-                    return RedirectToPage("Error");
-                }
+                ActionInput = Request.Form["ActionInput"];
+                ApplianceInput = Request.Form["ApplianceInput"];
 
+                setCurrentUser(ActionInput, ApplianceInput);
+
+                current.ShareStatus = (int)currentUser.ShareStatus;
+                current.ThingToShare = (int)currentUser.ThingToShare;
+
+                context.SaveChanges();
             }
 
             return Page();

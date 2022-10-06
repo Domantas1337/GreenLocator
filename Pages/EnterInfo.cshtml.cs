@@ -26,15 +26,11 @@ public class EnterInfoModel : PageModel
                 {
                     return RedirectToPage("Error");
                 }
-                AspNetUser? current = null;
-                foreach (var stud in context.AspNetUsers)
-                {
-                    if (stud.UserName == User.Identity.Name)
-                    {
-                        current = stud;
-                        break;
-                    }
-                }
+
+                var userList = from usr in context.AspNetUsers
+                               select usr;
+
+                AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
 
                 if (current == null)
                 {
