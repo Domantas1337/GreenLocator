@@ -38,8 +38,8 @@ public class EnterInfoModel : PageModel
                 }
                 else
                 {
-                    current.City = EnterInfoViewModel.CityInput;
-                    current.Street = EnterInfoViewModel.StreetInput;
+                    current.City = EnterInfoViewModel.CityInput ?? throw new ArgumentNullException();
+                    current.Street = EnterInfoViewModel.StreetInput ?? throw new ArgumentNullException();
                     current.House = EnterInfoViewModel.HouseInput;
 
                     context.SaveChanges();
@@ -53,11 +53,11 @@ public class EnterInfoModel : PageModel
         {
             return RedirectToPage("EnterInfo");
         }
-        catch (System.Data.SqlTypes.SqlNullValueException)
+        catch (FormatException)
         {
             return RedirectToPage("EnterInfo");
         }
-        catch (FormatException)
+        catch (ArgumentNullException)
         {
             return RedirectToPage("EnterInfo");
         }

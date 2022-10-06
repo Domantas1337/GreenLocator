@@ -32,9 +32,9 @@ public class MainModel : PageModel
 
                 AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
 
-                currentUser.City = current.City;
-                currentUser.Street = current.Street;
-                currentUser.house = current.House;
+                currentUser.City = current.City ?? throw new ArgumentNullException();
+                currentUser.Street = current.Street ?? throw new ArgumentNullException();
+                currentUser.house = current.House ?? throw new ArgumentNullException();
 
                 if (current.ShareStatus == null || current.ThingToShare == null)
                 {
@@ -56,7 +56,7 @@ public class MainModel : PageModel
             {
                 return RedirectToPage("EnterInfo");
             }
-            catch (System.Data.SqlTypes.SqlNullValueException)
+            catch (ArgumentNullException)
             {
                 return RedirectToPage("EnterInfo");
             }
@@ -155,9 +155,9 @@ public enum Appliance
 }
 
 public class UserInfo{
-    public string? City;
-    public string? Street;
-    public int? house;
+    public string City = null;
+    public string Street = null;
+    public int house;
     public Status ShareStatus;
     public Appliance ThingToShare;
 }
