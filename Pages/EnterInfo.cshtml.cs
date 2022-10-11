@@ -30,21 +30,18 @@ public class EnterInfoModel : PageModel
 
                 AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
 
-                if (current.CheckIfUsrNull())
-                {
-                    return RedirectToPage("EnterInfo");
-                }
-                else
-                {
-                    if (current.CheckIfUsrFieldsNull())
-                    {
-                        throw new ArgumentNullException();
-                    }
+                current.City = EnterInfoViewModel.CityInput ?? throw new ArgumentNullException();
+                current.Street = EnterInfoViewModel.StreetInput ?? throw new ArgumentNullException();
+                current.House = EnterInfoViewModel.HouseInput;
 
-                    context.SaveChanges();
-
-                    return RedirectToPage("Main");
+                if (current.CheckIfUsrFieldsNull())
+                {
+                    throw new ArgumentNullException();
                 }
+
+                context.SaveChanges();
+
+                return RedirectToPage("Main");
             }
 
         }

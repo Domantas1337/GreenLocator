@@ -29,12 +29,11 @@ public class MainModel : PageModel
 
                 AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
 
-                if (current.CheckIfUsrFieldsNull())
-                {
-                    throw new ArgumentNullException();
-                }
+                currentUser.City = current.City ?? throw new ArgumentNullException();
+                currentUser.Street = current.Street ?? throw new ArgumentNullException();
+                currentUser.house = current.House ?? throw new ArgumentNullException();
 
-                if(current.CheckIfUsrStatusNull())
+                if (current.CheckIfUsrStatusNull())
                 {
                     current.ShareStatus = 0;
                     current.ThingToShare = 0;
@@ -43,11 +42,12 @@ public class MainModel : PageModel
                 }
                 else
                 {
-                    currentUser.ShareStatus = (Status)current.ShareStatus;      // warnings appeared after implementing extension methods
+                    currentUser.ShareStatus = (Status)current.ShareStatus; // warnings after extension method implementation
                     currentUser.ThingToShare = (Appliance)current.ThingToShare;
+
                 }
 
-                    return Page();
+                return Page();
 
             }
             catch (InvalidOperationException)
@@ -152,10 +152,20 @@ public enum Appliance
     NoValue, WashingMachine, Oven
 }
 
-public class UserInfo{
-    public string City = "";
-    public string Street = "";
-    public int house;
-    public Status ShareStatus;
-    public Appliance ThingToShare;
+public struct UserInfo
+{
+    public string City { get; set; }
+    public string Street { get; set; }
+    public int house { get; set; }
+    public Status ShareStatus { get; set; }
+    public Appliance ThingToShare { get; set; }
+
+    public UserInfo(string City="", string Street="", int house=0, Status ShareStatus=0, Appliance ThingToShare=0)
+    {
+        this.City = City;
+        this.Street = Street;
+        this.house = house;
+        this.ShareStatus= ShareStatus;
+        this.ThingToShare = ThingToShare;
+    }
 }
