@@ -155,8 +155,8 @@ public enum Appliance
 }
 
 public class UserInfo{
-    public string City = null;
-    public string Street = null;
+    public string City = "";
+    public string Street = "";
     public int house;
     public Status ShareStatus;
     public Appliance ThingToShare;

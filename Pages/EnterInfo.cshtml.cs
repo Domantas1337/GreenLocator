@@ -10,7 +10,7 @@ namespace GreenLocator.Pages;
 public class EnterInfoModel : PageModel
 {
     [BindProperty]
-    public EnterInfoViewModel EnterInfoViewModel { get; set; }
+    public EnterInfoViewModel EnterInfoViewModel { get; set; } = null!;
 
     public IActionResult OnPost()
     {
@@ -38,6 +38,7 @@ public class EnterInfoModel : PageModel
                 }
                 else
                 {
+
                     current.City = EnterInfoViewModel.CityInput ?? throw new ArgumentNullException();
                     current.Street = EnterInfoViewModel.StreetInput ?? throw new ArgumentNullException();
                     current.House = EnterInfoViewModel.HouseInput;
