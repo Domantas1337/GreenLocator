@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 using GreenLocator.Models;
 
 using Microsoft.AspNetCore.Mvc;
@@ -32,16 +30,16 @@ public class EnterInfoModel : PageModel
 
                 AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
 
-                if (current == null)
+                if (current.CheckIfUsrNull())
                 {
                     return RedirectToPage("EnterInfo");
                 }
                 else
                 {
-
-                    current.City = EnterInfoViewModel.CityInput ?? throw new ArgumentNullException();
-                    current.Street = EnterInfoViewModel.StreetInput ?? throw new ArgumentNullException();
-                    current.House = EnterInfoViewModel.HouseInput;
+                    if (current.CheckIfUsrFieldsNull())
+                    {
+                        throw new ArgumentNullException();
+                    }
 
                     context.SaveChanges();
 

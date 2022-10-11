@@ -3,9 +3,6 @@ using GreenLocator.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-using System.Linq;
-
-
 namespace GreenLocator.Pages;
 
 public class MainModel : PageModel
@@ -32,11 +29,12 @@ public class MainModel : PageModel
 
                 AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
 
-                currentUser.City = current.City ?? throw new ArgumentNullException();
-                currentUser.Street = current.Street ?? throw new ArgumentNullException();
-                currentUser.house = current.House ?? throw new ArgumentNullException();
+                if (current.CheckIfUsrFieldsNull())
+                {
+                    throw new ArgumentNullException();
+                }
 
-                if (current.ShareStatus == null || current.ThingToShare == null)
+                if(current.CheckIfUsrStatusNull())
                 {
                     current.ShareStatus = 0;
                     current.ThingToShare = 0;
@@ -45,7 +43,7 @@ public class MainModel : PageModel
                 }
                 else
                 {
-                    currentUser.ShareStatus = (Status)current.ShareStatus;
+                    currentUser.ShareStatus = (Status)current.ShareStatus;      // warnings appeared after implementing extension methods
                     currentUser.ThingToShare = (Appliance)current.ThingToShare;
                 }
 
