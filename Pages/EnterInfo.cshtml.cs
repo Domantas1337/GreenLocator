@@ -1,7 +1,7 @@
 using GreenLocator.Models;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text.RegularExpressions;
 
 namespace GreenLocator.Pages;
 
@@ -29,6 +29,13 @@ public class EnterInfoModel : PageModel
                                select usr;
 
                 AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
+
+                if(!InputValidation(city:EnterInfoViewModel.CityInput,
+                                    street:EnterInfoViewModel.StreetInput,
+                                    house:EnterInfoViewModel.HouseInput))
+                {
+                    throw new FormatException();
+                }
 
                 current.City = EnterInfoViewModel.CityInput ?? throw new ArgumentNullException();
                 current.Street = EnterInfoViewModel.StreetInput ?? throw new ArgumentNullException();
@@ -65,6 +72,34 @@ public class EnterInfoModel : PageModel
     }
     public void OnGet()
     {
+    }
+
+    private bool InputValidation(string city, string street, int house)
+    {
+        if (CheckString(city) && CheckString(street) && CheckHouse(house))
+            return true;
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool CheckString(string input)
+    {
+        string pattern = "^[a-zA-Z]{3,50}$";
+
+        Regex rx = new Regex(pattern);
+
+        return rx.IsMatch(input);
+    }
+
+    private bool CheckHouse(int input)
+    {
+        string pattern = "^[0-9]{1,4}$";
+
+        Regex rx = new Regex(pattern);
+
+        return rx.IsMatch(input.ToString());
     }
 
 }
