@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GreenLocator.Pages
 {
-    public class Index1Model : PageModel
+    public class ChatModel : PageModel
     {
         public void OnGet()
         {

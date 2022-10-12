@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GreenLocator.Pages;
 
-public class ChatModel : PageModel
+public class ChatIndexModel : PageModel
 {
-    private readonly ILogger<ChatModel> _logger;
+    private readonly ILogger<ChatIndexModel> _logger;
 
-    public ChatModel(ILogger<ChatModel> logger)
+    public ChatIndexModel(ILogger<ChatIndexModel> logger)
     {
         _logger = logger;
     }
