@@ -1,16 +1,14 @@
-using System.ComponentModel.DataAnnotations;
-
 using GreenLocator.Models;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text.RegularExpressions;
 
 namespace GreenLocator.Pages;
 
 public class EnterInfoModel : PageModel
 {
     [BindProperty]
-    public EnterInfoViewModel EnterInfoViewModel { get; set; }
+    public EnterInfoViewModel EnterInfoViewModel { get; set; } = null!;
 
     public IActionResult OnPost()
     {
@@ -32,20 +30,25 @@ public class EnterInfoModel : PageModel
 
                 AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
 
-                if (current == null)
+                if(!InputValidation(city:EnterInfoViewModel.CityInput,
+                                    street:EnterInfoViewModel.StreetInput,
+                                    house:EnterInfoViewModel.HouseInput))
                 {
-                    return RedirectToPage("EnterInfo");
+                    throw new FormatException();
                 }
-                else
+
+                current.City = EnterInfoViewModel.CityInput ?? throw new ArgumentNullException();
+                current.Street = EnterInfoViewModel.StreetInput ?? throw new ArgumentNullException();
+                current.House = EnterInfoViewModel.HouseInput;
+
+                if (current.CheckIfUsrFieldsNull())
                 {
-                    current.City = EnterInfoViewModel.CityInput ?? throw new ArgumentNullException();
-                    current.Street = EnterInfoViewModel.StreetInput ?? throw new ArgumentNullException();
-                    current.House = EnterInfoViewModel.HouseInput;
-
-                    context.SaveChanges();
-
-                    return RedirectToPage("Main");
+                    throw new ArgumentNullException();
                 }
+
+                context.SaveChanges();
+
+                return RedirectToPage("Main");
             }
 
         }
@@ -69,6 +72,34 @@ public class EnterInfoModel : PageModel
     }
     public void OnGet()
     {
+    }
+
+    private bool InputValidation(string city, string street, int house)
+    {
+        if (CheckString(city) && CheckString(street) && CheckHouse(house))
+            return true;
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool CheckString(string input)
+    {
+        string pattern = "^[a-zA-Z]{3,50}$";
+
+        Regex rx = new Regex(pattern);
+
+        return rx.IsMatch(input);
+    }
+
+    private bool CheckHouse(int input)
+    {
+        string pattern = "^[0-9]{1,4}$";
+
+        Regex rx = new Regex(pattern);
+
+        return rx.IsMatch(input.ToString());
     }
 
 }

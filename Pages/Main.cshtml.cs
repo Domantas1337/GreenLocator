@@ -3,9 +3,6 @@ using GreenLocator.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-using System.Linq;
-
-
 namespace GreenLocator.Pages;
 
 public class MainModel : PageModel
@@ -36,7 +33,7 @@ public class MainModel : PageModel
                 currentUser.Street = current.Street ?? throw new ArgumentNullException();
                 currentUser.house = current.House ?? throw new ArgumentNullException();
 
-                if (current.ShareStatus == null || current.ThingToShare == null)
+                if (current.CheckIfUsrStatusNull())
                 {
                     current.ShareStatus = 0;
                     current.ThingToShare = 0;
@@ -45,11 +42,12 @@ public class MainModel : PageModel
                 }
                 else
                 {
-                    currentUser.ShareStatus = (Status)current.ShareStatus;
+                    currentUser.ShareStatus = (Status)current.ShareStatus; // warnings after extension method implementation
                     currentUser.ThingToShare = (Appliance)current.ThingToShare;
+
                 }
 
-                    return Page();
+                return Page();
 
             }
             catch (InvalidOperationException)
@@ -87,7 +85,7 @@ public class MainModel : PageModel
                 ActionInput = Request.Form["ActionInput"];
                 ApplianceInput = Request.Form["ApplianceInput"];
 
-                setCurrentUser(ActionInput, ApplianceInput);
+                SetCurrentUser(ActionInput, ApplianceInput);
 
                 current.ShareStatus = (int)currentUser.ShareStatus;
                 current.ThingToShare = (int)currentUser.ThingToShare;
@@ -111,7 +109,7 @@ public class MainModel : PageModel
         }
     }
 
-    private void setCurrentUser(string action, string appliance)
+    private void SetCurrentUser<T>(T action, T appliance)
     {
 
         switch (action)
@@ -154,10 +152,26 @@ public enum Appliance
     NoValue, WashingMachine, Oven
 }
 
-public class UserInfo{
-    public string City = null;
-    public string Street = null;
-    public int house;
-    public Status ShareStatus;
-    public Appliance ThingToShare;
+public struct UserInfo : IEquatable<UserInfo>
+{
+    public string City { get; set; }
+    public string Street { get; set; }
+    public int house { get; set; }
+    public Status ShareStatus { get; set; }
+    public Appliance ThingToShare { get; set; }
+
+    public UserInfo(string City="", string Street="", int house=0, Status ShareStatus=0, Appliance ThingToShare=0)
+    {
+        this.City = City;
+        this.Street = Street;
+        this.house = house;
+        this.ShareStatus= ShareStatus;
+        this.ThingToShare = ThingToShare;
+    }
+
+    public bool Equals(UserInfo userInfo)
+    {
+        return (this.City, this.Street, this.house, this.ShareStatus, this.ThingToShare) ==
+            (userInfo.City, userInfo.Street, userInfo.house, userInfo.ShareStatus, userInfo.ThingToShare);
+    }
 }
