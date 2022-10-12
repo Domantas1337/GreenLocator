@@ -85,7 +85,7 @@ public class MainModel : PageModel
                 ActionInput = Request.Form["ActionInput"];
                 ApplianceInput = Request.Form["ApplianceInput"];
 
-                setCurrentUser(ActionInput, ApplianceInput);
+                SetCurrentUser(ActionInput, ApplianceInput);
 
                 current.ShareStatus = (int)currentUser.ShareStatus;
                 current.ThingToShare = (int)currentUser.ThingToShare;
@@ -109,7 +109,7 @@ public class MainModel : PageModel
         }
     }
 
-    private void setCurrentUser(string action, string appliance)
+    private void SetCurrentUser<T>(T action, T appliance)
     {
 
         switch (action)
@@ -152,7 +152,7 @@ public enum Appliance
     NoValue, WashingMachine, Oven
 }
 
-public struct UserInfo
+public struct UserInfo : IEquatable<UserInfo>
 {
     public string City { get; set; }
     public string Street { get; set; }
@@ -167,5 +167,11 @@ public struct UserInfo
         this.house = house;
         this.ShareStatus= ShareStatus;
         this.ThingToShare = ThingToShare;
+    }
+
+    public bool Equals(UserInfo userInfo)
+    {
+        return (this.City, this.Street, this.house, this.ShareStatus, this.ThingToShare) ==
+            (userInfo.City, userInfo.Street, userInfo.house, userInfo.ShareStatus, userInfo.ThingToShare);
     }
 }
