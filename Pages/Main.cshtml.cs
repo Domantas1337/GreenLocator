@@ -24,10 +24,7 @@ public class MainModel : PageModel
                     return RedirectToPage("Error");
                 }
 
-                var userList = from usr in context.AspNetUsers
-                            select usr;
-
-                AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
+                AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
                 currentUser.City = current.City ?? throw new ArgumentNullException();
                 currentUser.Street = current.Street ?? throw new ArgumentNullException();
@@ -77,10 +74,7 @@ public class MainModel : PageModel
                     return RedirectToPage("Error");
                 }
 
-                var userList = from usr in context.AspNetUsers
-                               select usr;
-
-                AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
+                AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
                 ActionInput = Request.Form["ActionInput"];
                 ApplianceInput = Request.Form["ApplianceInput"];

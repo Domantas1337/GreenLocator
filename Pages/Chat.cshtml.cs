@@ -19,10 +19,7 @@ namespace GreenLocator.Pages
                     RedirectToPage("Error");
                 }
 
-                var userList = from usr in context.AspNetUsers
-                               select usr;
-
-                AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
+                AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
                 Options = context.AspNetUsers.Where(usr => usr.City == current.City && usr.Street == current.Street
                                 && usr.House == current.House && usr.ThingToShare == current.ThingToShare

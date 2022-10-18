@@ -45,6 +45,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
     endpoints.MapHub<ChatHub>("/chatHub");
 });
-//app.MapHub<ChatHub>("/chatHub");
 
 app.Run();
