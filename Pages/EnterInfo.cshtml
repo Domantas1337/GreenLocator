@@ -14,10 +14,7 @@
                 return "error";
             }
 
-            var userList = from usr in context.AspNetUsers
-                           select usr;
-
-            AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
+            AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
             if (input == "City")
             {

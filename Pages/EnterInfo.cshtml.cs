@@ -25,10 +25,7 @@ public class EnterInfoModel : PageModel
                     return RedirectToPage("Error");
                 }
 
-                var userList = from usr in context.AspNetUsers
-                               select usr;
-
-                AspNetUser current = userList.First(x => x.UserName == User.Identity.Name);
+                AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
                 if(!InputValidation(city:EnterInfoViewModel.CityInput,
                                     street:EnterInfoViewModel.StreetInput,
