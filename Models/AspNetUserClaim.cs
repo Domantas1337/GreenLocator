@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace GreenLocator.Models
+﻿namespace GreenLocator.Models
 {
     public partial class AspNetUserClaim
     {

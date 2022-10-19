@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace GreenLocator.Models
+﻿namespace GreenLocator.Models
 {
     public partial class AspNetUser
     {
@@ -31,7 +28,7 @@ namespace GreenLocator.Models
         public string? City { get; set; }
         public string? Street { get; set; }
         public int? House { get; set; }
-        public int? ShareStatus { get; set; }   // do enum
+        public int? ShareStatus { get; set; }
         public int? ThingToShare { get; set; }
 
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
