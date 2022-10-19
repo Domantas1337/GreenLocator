@@ -67,9 +67,6 @@ public class EnterInfoModel : PageModel
         }
 
     }
-    public void OnGet()
-    {
-    }
 
     private bool InputValidation(string city, string street, int house)
     {
