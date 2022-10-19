@@ -14,7 +14,6 @@ public class MainModel : PageModel
 
     public IActionResult OnGet()
     {
-
         using var context = new GreenLocatorDBContext();
         try
         {
@@ -102,7 +101,6 @@ public class MainModel : PageModel
 
     private void SetCurrentUser<T>(T action, T appliance)
     {
-
         switch (action)
         {
             case "Borrow":
