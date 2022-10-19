@@ -14,52 +14,48 @@ public class MainModel : PageModel
 
     public IActionResult OnGet()
     {
-
-        using (var context = new GreenLocatorDBContext())
+        using var context = new GreenLocatorDBContext();
+        try
         {
-            try
-            {
-                if(User.Identity == null)
-                {
-                    return RedirectToPage("Error");
-                }
-
-                AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
-
-                currentUser.City = current.City ?? throw new ArgumentNullException();
-                currentUser.Street = current.Street ?? throw new ArgumentNullException();
-                currentUser.house = current.House ?? throw new ArgumentNullException();
-
-                if (current.CheckIfUsrStatusNull())
-                {
-                    current.ShareStatus = 0;
-                    current.ThingToShare = 0;
-
-                    context.SaveChanges();
-                }
-                else
-                {
-                    currentUser.ShareStatus = (Status)current.ShareStatus; // warnings after extension method implementation
-                    currentUser.ThingToShare = (Appliance)current.ThingToShare;
-
-                }
-
-                return Page();
-
-            }
-            catch (InvalidOperationException)
-            {
-                return RedirectToPage("EnterInfo");
-            }
-            catch (ArgumentNullException)
-            {
-                return RedirectToPage("EnterInfo");
-            }
-            catch (Exception)
+            if (User.Identity == null)
             {
                 return RedirectToPage("Error");
             }
-            
+
+            AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+
+            currentUser.City = current.City ?? throw new ArgumentNullException();
+            currentUser.Street = current.Street ?? throw new ArgumentNullException();
+            currentUser.house = current.House ?? throw new ArgumentNullException();
+
+            if (current.CheckIfUsrStatusNull())
+            {
+                current.ShareStatus = 0;
+                current.ThingToShare = 0;
+
+                context.SaveChanges();
+            }
+            else
+            {
+                currentUser.ShareStatus = (Status)current.ShareStatus; // warnings after extension method implementation
+                currentUser.ThingToShare = (Appliance)current.ThingToShare;
+
+            }
+
+            return Page();
+
+        }
+        catch (InvalidOperationException)
+        {
+            return RedirectToPage("EnterInfo");
+        }
+        catch (ArgumentNullException)
+        {
+            return RedirectToPage("EnterInfo");
+        }
+        catch (Exception)
+        {
+            return RedirectToPage("Error");
         }
     }
 
@@ -105,7 +101,6 @@ public class MainModel : PageModel
 
     private void SetCurrentUser<T>(T action, T appliance)
     {
-
         switch (action)
         {
             case "Borrow":

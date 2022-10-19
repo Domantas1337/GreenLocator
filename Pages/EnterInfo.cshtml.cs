@@ -67,14 +67,13 @@ public class EnterInfoModel : PageModel
         }
 
     }
-    public void OnGet()
-    {
-    }
 
     private bool InputValidation(string city, string street, int house)
     {
         if (CheckString(city) && CheckString(street) && CheckHouse(house))
+        {
             return true;
+        }
         else
         {
             return false;
