@@ -45,16 +45,20 @@ public class MainModel : PageModel
             return Page();
 
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException ex)
         {
+            ErrorLogging(ex);
+
             return RedirectToPage("EnterInfo");
         }
         catch (ArgumentNullException)
         {
             return RedirectToPage("EnterInfo");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            ErrorLogging(ex);
+
             return RedirectToPage("Error");
         }
     }
@@ -85,16 +89,22 @@ public class MainModel : PageModel
 
             return Page();
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException ex)
         {
+            ErrorLogging(ex);
+
             return RedirectToPage("EnterInfo");
         }
-        catch (System.Data.SqlTypes.SqlNullValueException)
+        catch (System.Data.SqlTypes.SqlNullValueException ex)
         {
+            ErrorLogging(ex);
+
             return RedirectToPage("EnterInfo");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            ErrorLogging(ex);
+
             return RedirectToPage("Error");
         }
     }
@@ -127,6 +137,25 @@ public class MainModel : PageModel
 
             default:
                 break;
+        }
+    }
+
+    private static void ErrorLogging(Exception ex)
+    {
+        string filePath = @"C:\Error.txt";
+
+        using (StreamWriter writer = new(filePath, true))
+        {
+            writer.WriteLine("-----------------------------------------------------------------------------");
+            writer.WriteLine("Date : " + DateTime.Now.ToString());
+            writer.WriteLine();
+
+            while (ex != null)
+            {
+                writer.WriteLine(ex.GetType().FullName);
+                writer.WriteLine("Message : " + ex.Message);
+                writer.WriteLine("StackTrace : " + ex.StackTrace);
+            }
         }
     }
 }
