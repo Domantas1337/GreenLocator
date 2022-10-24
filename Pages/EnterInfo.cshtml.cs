@@ -22,7 +22,7 @@ public class EnterInfoModel : PageModel
             {
                 if (User.Identity == null)
                 {
-                    return RedirectToPage("Error");
+                    throw new FormatException();
                 }
 
                 AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
@@ -49,10 +49,7 @@ public class EnterInfoModel : PageModel
             }
 
         }
-        catch (InvalidOperationException)
-        {
-            return RedirectToPage("EnterInfo");
-        }
+
         catch (FormatException)
         {
             return RedirectToPage("EnterInfo");
@@ -61,8 +58,16 @@ public class EnterInfoModel : PageModel
         {
             return RedirectToPage("EnterInfo");
         }
-        catch (Exception)
+        catch (InvalidOperationException ex)
         {
+            ErrorLogging(ex);
+
+            return RedirectToPage("EnterInfo");
+        }
+        catch (Exception ex)
+        {
+            ErrorLogging(ex);
+
             return RedirectToPage("Error");
         }
 
@@ -96,6 +101,25 @@ public class EnterInfoModel : PageModel
         Regex rx = new Regex(pattern);
 
         return rx.IsMatch(input.ToString());
+    }
+
+    private static void ErrorLogging(Exception ex)
+    {
+        string filePath = @"C:\Error.txt";
+
+        using (StreamWriter writer = new(filePath, true))
+        {
+            writer.WriteLine("-----------------------------------------------------------------------------");
+            writer.WriteLine("Date : " + DateTime.Now.ToString());
+            writer.WriteLine();
+
+            while (ex != null)
+            {
+                writer.WriteLine(ex.GetType().FullName);
+                writer.WriteLine("Message : " + ex.Message);
+                writer.WriteLine("StackTrace : " + ex.StackTrace);
+            }
+        }
     }
 
 }
