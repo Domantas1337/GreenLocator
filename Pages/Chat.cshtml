@@ -2,22 +2,19 @@
 @using GreenLocator.Models;
 @using Microsoft.AspNetCore.Mvc;
 @model GreenLocator.Pages.ChatModel
-@{
-}
+@inject GreenLocatorDBContext _context
 @functions {
     public string Sender()
     {
-        using (var context = new GreenLocatorDBContext())
+        if(User.Identity == null)
         {
-            if(User.Identity == null)
-            {
-                return "Error";
-            }
-
-            AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
-
-            return current.UserName;
+            return "Error";
         }
+
+        AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name) ?? throw new ArgumentNullException();
+        string name = current.UserName ?? throw new ArgumentNullException();
+
+        return name;
     }
 }
 <div class="container">
