@@ -1,53 +1,53 @@
 ﻿@page
+
 @using GreenLocator.Models;
 @using Microsoft.AspNetCore.Mvc;
+
 @model GreenLocator.Pages.EnterInfoModel
-@{
-}
+
+@inject GreenLocatorDBContext _context
+
 @functions {
     public string Values(string input)
     {
-        using (var context = new GreenLocatorDBContext())
+        if(User.Identity == null)
         {
-            if(User.Identity == null)
-            {
-                return "error";
-            }
+            return "error";
+        }
 
-            AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+        AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
-            if (input == "City")
-            {
-                if(current.City != null){
-                    return current.City;
-                }
-                else
-                {
-                    return "";
-                }
-            }
-            else if (input == "Street")
-            {
-                if(current.Street != null)
-                {
-                    return current.Street;
-                }
-                else
-                {
-                    return "";
-                }
-
+        if (input == "City")
+        {
+            if(current.City != null){
+                return current.City;
             }
             else
             {
-                if(current.House != null)
-                {
-                    return current.House.ToString();
-                }
-                else
-                {
-                    return "";
-                }
+                return "";
+            }
+        }
+        else if (input == "Street")
+        {
+            if(current.Street != null)
+            {
+                return current.Street;
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+        else
+        {
+            if(current.House != null)
+            {
+                return current.House.ToString();
+            }
+            else
+            {
+                return "";
             }
         }
     }
