@@ -148,18 +148,16 @@ public class MainModel : PageModel
     {
         string filePath = @"C:\Error.txt";
 
-        using (StreamWriter writer = new(filePath, true))
-        {
-            writer.WriteLine("-----------------------------------------------------------------------------");
-            writer.WriteLine("Date : " + DateTime.Now.ToString());
-            writer.WriteLine();
+        using StreamWriter writer = new(filePath, true);
+        writer.WriteLine("-----------------------------------------------------------------------------");
+        writer.WriteLine("Date : " + DateTime.Now.ToString());
+        writer.WriteLine();
 
-            while (ex != null)
-            {
-                writer.WriteLine(ex.GetType().FullName);
-                writer.WriteLine("Message : " + ex.Message);
-                writer.WriteLine("StackTrace : " + ex.StackTrace);
-            }
+        while (ex != null)
+        {
+            writer.WriteLine(ex.GetType().FullName);
+            writer.WriteLine("Message : " + ex.Message);
+            writer.WriteLine("StackTrace : " + ex.StackTrace);
         }
     }
 }
