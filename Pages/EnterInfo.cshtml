@@ -8,6 +8,7 @@
 @inject GreenLocatorDBContext _context
 
 @functions {
+    Delegates.StringToString dValues;
     public string Values(string input)
     {
         if(User.Identity == null)
