@@ -2,6 +2,7 @@ using GreenLocator.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using GreenLocator.Hubs;
+using GreenLocator.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
+
+// Dependency injection:
+builder.Services.AddScoped<GreenLocatorDBContext>();
 
 var app = builder.Build();
 

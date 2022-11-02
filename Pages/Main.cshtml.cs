@@ -1,5 +1,4 @@
 using GreenLocator.Models;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -7,14 +6,19 @@ namespace GreenLocator.Pages;
 
 public class MainModel : PageModel
 {
+    private readonly GreenLocatorDBContext _context;
+    public MainModel(GreenLocatorDBContext context)
+    {
+        _context = context;
+    }
+
     public UserInfo currentUser = new();
 
     public string? ActionInput;
     public string? ApplianceInput;
 
     public IActionResult OnGet()
-    {
-        using var context = new GreenLocatorDBContext();
+    {   
         try
         {
             if (User.Identity == null)
@@ -22,7 +26,7 @@ public class MainModel : PageModel
                 return RedirectToPage("Error");
             }
 
-            AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+            AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
             currentUser.City = current.City ?? throw new ArgumentNullException();
             currentUser.Street = current.Street ?? throw new ArgumentNullException();
@@ -33,7 +37,7 @@ public class MainModel : PageModel
                 current.ShareStatus = 0;
                 current.ThingToShare = 0;
 
-                context.SaveChanges();
+                _context.SaveChanges();
             }
             else
             {
@@ -150,12 +154,11 @@ public class MainModel : PageModel
             writer.WriteLine("Date : " + DateTimeOffset.UtcNow.ToString());
             writer.WriteLine();
 
-            while (ex != null)
-            {
-                writer.WriteLine(ex.GetType().FullName);
-                writer.WriteLine("Message : " + ex.Message);
-                writer.WriteLine("StackTrace : " + ex.StackTrace);
-            }
+        while (ex != null)
+        {
+            writer.WriteLine(ex.GetType().FullName);
+            writer.WriteLine("Message : " + ex.Message);
+            writer.WriteLine("StackTrace : " + ex.StackTrace);
         }
     }
 }
