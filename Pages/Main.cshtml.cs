@@ -147,7 +147,7 @@ public class MainModel : PageModel
         using (StreamWriter writer = new(filePath, true))
         {
             writer.WriteLine("-----------------------------------------------------------------------------");
-            writer.WriteLine("Date : " + DateTime.Now.ToString());
+            writer.WriteLine("Date : " + DateTimeOffset.UtcNow.ToString());
             writer.WriteLine();
 
             while (ex != null)
