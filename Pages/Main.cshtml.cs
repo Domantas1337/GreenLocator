@@ -154,11 +154,12 @@ public class MainModel : PageModel
             writer.WriteLine("Date : " + DateTimeOffset.UtcNow.ToString());
             writer.WriteLine();
 
-        while (ex != null)
-        {
-            writer.WriteLine(ex.GetType().FullName);
-            writer.WriteLine("Message : " + ex.Message);
-            writer.WriteLine("StackTrace : " + ex.StackTrace);
+            while (ex != null)
+            {
+                writer.WriteLine(ex.GetType().FullName);
+                writer.WriteLine("Message : " + ex.Message);
+                writer.WriteLine("StackTrace : " + ex.StackTrace);
+            }
         }
     }
 }
