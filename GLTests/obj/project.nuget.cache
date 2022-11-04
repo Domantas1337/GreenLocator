@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "OknaxFcvtkX0td17F/pBB0eoLYCgeea/J/tIx5bkGoxo/sBLKa/qm0STakGn/J4zkgi60wHieZdz0rQWJyB78w==",
+  "dgSpecHash": "/OfTZqsw20Am5sbGsbaQEz34bvJ4gzDV4kRreHJq8+aIvlMZS22xrKT6J9B8TH5mTH+tmtRh09KrrKLIn3SA5g==",
   "success": true,
   "projectFilePath": "C:\\Users\\3\\Documents\\bandymai\\GreenLocator\\GLTests\\GLTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\3\\.nuget\\packages\\autofixture\\4.17.0\\autofixture.4.17.0.nupkg.sha512",
     "C:\\Users\\3\\.nuget\\packages\\autofixture.automoq\\4.17.0\\autofixture.automoq.4.17.0.nupkg.sha512",
+    "C:\\Users\\3\\.nuget\\packages\\autofixture.xunit2\\4.17.0\\autofixture.xunit2.4.17.0.nupkg.sha512",
     "C:\\Users\\3\\.nuget\\packages\\automoq\\2.0.0\\automoq.2.0.0.nupkg.sha512",
     "C:\\Users\\3\\.nuget\\packages\\castle.core\\4.0.0\\castle.core.4.0.0.nupkg.sha512",
     "C:\\Users\\3\\.nuget\\packages\\commonservicelocator\\1.3.0\\commonservicelocator.1.3.0.nupkg.sha512",

@@ -8,7 +8,9 @@
     ".NETCoreApp,Version=v6.0": {
       "GLTests/1.0.0": {
         "dependencies": {
+          "AutoFixture": "4.17.0",
           "AutoFixture.AutoMoq": "4.17.0",
+          "AutoFixture.Xunit2": "4.17.0",
           "AutoMoq": "2.0.0",
           "GreenLocator": "1.0.0",
           "Microsoft.NET.Test.Sdk": "17.3.2",
@@ -39,6 +41,18 @@
         },
         "runtime": {
           "lib/netstandard2.0/AutoFixture.AutoMoq.dll": {
+            "assemblyVersion": "4.17.0.0",
+            "fileVersion": "4.17.0.636"
+          }
+        }
+      },
+      "AutoFixture.Xunit2/4.17.0": {
+        "dependencies": {
+          "AutoFixture": "4.17.0",
+          "xunit.extensibility.core": "2.4.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/AutoFixture.Xunit2.dll": {
             "assemblyVersion": "4.17.0.0",
             "fileVersion": "4.17.0.636"
           }
@@ -2029,6 +2043,13 @@
       "sha512": "sha512-i6xReNJM8+jjXk1LJ5UBPJMZjoOAr7mkgM1pkI40aZJ9Y2KZxRW528XmLoYzDmvIayDtvzkYd1Zns0dn7Kkr0g==",
       "path": "autofixture.automoq/4.17.0",
       "hashPath": "autofixture.automoq.4.17.0.nupkg.sha512"
+    },
+    "AutoFixture.Xunit2/4.17.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lrURL/LhJLPkn2tSPUEW8Wscr5LoV2Mr8A+ikn5gwkofex3o7qWUsBswlLw+KCA7EOpeqwZOldp3k91zDF+48Q==",
+      "path": "autofixture.xunit2/4.17.0",
+      "hashPath": "autofixture.xunit2.4.17.0.nupkg.sha512"
     },
     "AutoMoq/2.0.0": {
       "type": "package",

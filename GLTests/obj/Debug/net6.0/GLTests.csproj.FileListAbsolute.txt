@@ -496,3 +496,4 @@ C:\Users\3\Documents\bandymai\GreenLocator\GLTests\obj\Debug\net6.0\refint\GLTes
 C:\Users\3\Documents\bandymai\GreenLocator\GLTests\obj\Debug\net6.0\GLTests.pdb
 C:\Users\3\Documents\bandymai\GreenLocator\GLTests\obj\Debug\net6.0\GLTests.genruntimeconfig.cache
 C:\Users\3\Documents\bandymai\GreenLocator\GLTests\obj\Debug\net6.0\ref\GLTests.dll
+C:\Users\3\Documents\bandymai\GreenLocator\GLTests\bin\Debug\net6.0\AutoFixture.Xunit2.dll

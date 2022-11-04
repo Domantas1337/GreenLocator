@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Moq;
 using AutoFixture;
+using AutoFixture.Xunit2;
+using AutoFixture.AutoMoq;
 
 namespace GLTests
 {
@@ -12,11 +14,18 @@ namespace GLTests
         [Fact]
         public void ConnectionToDBValid()
         {
-            using var context = new GreenLocatorDBContext();
+            var context = new GreenLocatorDBContext();
             Assert.True(context.Database.CanConnect());
         }
 
+        [Theory, AutoData]
+        public void ConnectionToDB_valid(IFixture fixture)
+        {
+            fixture.Customize(new AutoMoqCustomization());
+            var context = fixture.Create<GreenLocatorDBContext>();
 
+            Assert.True(context.Database.CanConnect());
+        }
 
     }
 }
