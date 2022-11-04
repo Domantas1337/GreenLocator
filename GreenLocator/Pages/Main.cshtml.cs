@@ -70,26 +70,23 @@ public class MainModel : PageModel
     public IActionResult OnPost()
     {
         try
-        { 
-            using (var context = new GreenLocatorDBContext())
+        {
+            if (User.Identity == null)
             {
-                if (User.Identity == null)
-                {
-                    return RedirectToPage("Error");
-                }
-
-                AspNetUser current = context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
-
-                ActionInput = Request.Form["ActionInput"];
-                ApplianceInput = Request.Form["ApplianceInput"];
-
-                SetCurrentUser(ActionInput, ApplianceInput);
-
-                current.ShareStatus = (int)currentUser.ShareStatus;
-                current.ThingToShare = (int)currentUser.ThingToShare;
-
-                context.SaveChanges();
+                return RedirectToPage("Error");
             }
+
+            AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+
+            ActionInput = Request.Form["ActionInput"];
+            ApplianceInput = Request.Form["ApplianceInput"];
+
+            SetCurrentUser(ActionInput, ApplianceInput);
+
+            current.ShareStatus = (int)currentUser.ShareStatus;
+            current.ThingToShare = (int)currentUser.ThingToShare;
+
+            _context.SaveChanges();
 
             return Page();
         }
