@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using GreenLocator.Hubs;
 using GreenLocator.Models;
+using GreenLocator.Pages;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,9 @@ builder.Services.AddSignalR();
 
 // Dependency injection:
 builder.Services.AddScoped<GreenLocatorDBContext>();
+builder.Services.AddScoped<AspNetUser>();
+builder.Services.AddScoped<MainModel>();
+
 
 var app = builder.Build();
 
