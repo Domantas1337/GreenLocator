@@ -40,14 +40,14 @@ namespace GLTests
 
             fixture.Register((Mock<AspNetUser> m) => m.Object);
             var user = fixture.Create<AspNetUser>();
+
             user.City = null;
             user.Street = null;
             user.House = null;
 
-            //Assert.Throws<ArgumentNullException>( () => sut.OnGet() );
-            Assert.Equal(user.City, null);
-            Assert.Equal(user.Street, null);
-            Assert.Equal(user.House, null);
+            Assert.Null(user.City);
+            Assert.Null(user.Street);
+            Assert.Null(user.House);
         }
     }
 }
