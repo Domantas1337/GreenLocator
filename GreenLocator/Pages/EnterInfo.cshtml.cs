@@ -43,7 +43,7 @@ public class EnterInfoModel : PageModel
                 current.Street = EnterInfoViewModel.StreetInput ?? throw new ArgumentNullException();
                 current.House = EnterInfoViewModel.HouseInput;
 
-                if (current.CheckIfUsrFieldsNull())
+                if(Delegates.CheckUserInfo(Extensions.CheckIfUsrFieldsNull, current))
                 {
                     throw new ArgumentNullException();
                 }

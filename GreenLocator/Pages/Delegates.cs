@@ -1,10 +1,16 @@
-﻿namespace GreenLocator.Pages
+﻿using GreenLocator.Models;
+
+namespace GreenLocator.Pages
 {
     public class Delegates
     {
         public delegate string StringToString(string x);
         public delegate int IntIntToInt(int x, int y);
 
-        //StringToString dValues = Pages_EnterInfo.Values;
+        public delegate bool UserToBool(AspNetUser x);
+        public static bool CheckUserInfo(UserToBool myDelegate, AspNetUser current)
+        {
+            return myDelegate(current);
+        }
     }
 }
