@@ -7,6 +7,7 @@ using AutoFixture.Xunit2;
 using AutoFixture.AutoMoq;
 using GreenLocator.Pages;
 using NuGet.Frameworks;
+using System.Net.WebSockets;
 
 namespace GLTests
 {
@@ -34,8 +35,10 @@ namespace GLTests
             fixture.Customize(new AutoMoqCustomization());
             var context = fixture.Create<GreenLocatorDBContext>();
 
+            fixture.Register((Mock<MainModel> m) => m.Object);
             var sut = fixture.Create<MainModel>();  // sut - system under test
 
+            fixture.Register((Mock<AspNetUser> m) => m.Object);
             var user = fixture.Create<AspNetUser>();
             user.City = null;
             user.Street = null;
@@ -43,7 +46,8 @@ namespace GLTests
 
             //Assert.Throws<ArgumentNullException>( () => sut.OnGet() );
             Assert.Equal(user.City, null);
-
+            Assert.Equal(user.Street, null);
+            Assert.Equal(user.House, null);
         }
     }
 }
