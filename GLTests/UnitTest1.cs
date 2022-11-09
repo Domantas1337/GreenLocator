@@ -65,6 +65,26 @@ namespace GLTests
             Assert.False(Extensions.CheckIfUsrNull(user));
             Assert.True(Extensions.CheckIfUsrFieldsNull(user));
             Assert.True(Extensions.CheckIfUsrStatusNull(user));
+
+            user.City = "Vilnius";
+            user.Street = "Didlaukio";
+            user.House = 59;
+            user.ShareStatus = 1;
+            user.ThingToShare = 2;
+
+            Assert.False(Extensions.CheckIfUsrFieldsNull(user));
+            Assert.False(Extensions.CheckIfUsrStatusNull(user));
+
+            user.City = "Vilnius";
+            user.Street = "Didlaukio";
+            user.House = null;
+            user.ShareStatus = 1;
+            user.ThingToShare = null;
+
+            Assert.True(Extensions.CheckIfUsrFieldsNull(user));
+            Assert.True(Extensions.CheckIfUsrStatusNull(user));
+
+
         }
     }
 }
