@@ -49,5 +49,22 @@ namespace GLTests
             Assert.Null(user.Street);
             Assert.Null(user.House);
         }
+
+        [Theory, AutoData]
+        public void Extensions_Test(IFixture fixture)
+        {
+            fixture.Register((Mock<AspNetUser> m) => m.Object);
+            var user = fixture.Create<AspNetUser>();
+
+            user.City = null;
+            user.Street = null;
+            user.House = null;
+            user.ShareStatus = null;
+            user.ThingToShare = null;
+
+            Assert.False(Extensions.CheckIfUsrNull(user));
+            Assert.True(Extensions.CheckIfUsrFieldsNull(user));
+            Assert.True(Extensions.CheckIfUsrStatusNull(user));
+        }
     }
 }
