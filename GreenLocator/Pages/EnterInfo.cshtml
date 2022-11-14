@@ -8,11 +8,10 @@
 @inject GreenLocatorDBContext _context
 
 @functions {
-    //Delegates.StringToString dValues = Values;
 
     public string Values(string input)
     {
-        if(User.Identity == null)
+        if (User.Identity == null)
         {
             return "error";
         }
@@ -21,7 +20,8 @@
 
         if (input == "City")
         {
-            if(current.City != null){
+            if (current.City != null)
+            {
                 return current.City;
             }
             else
@@ -31,7 +31,7 @@
         }
         else if (input == "Street")
         {
-            if(current.Street != null)
+            if (current.Street != null)
             {
                 return current.Street;
             }
@@ -43,7 +43,7 @@
         }
         else
         {
-            if(current.House != null)
+            if (current.House != null)
             {
                 return current.House.ToString();
             }
@@ -53,6 +53,7 @@
             }
         }
     }
+
 }
 <h1>You have not yet entered correct address info</h1>
 <br />
