@@ -60,6 +60,27 @@
 <br />
 <br />
 
+<iframe
+  width="450"
+  height="250"
+  frameborder="0" style="border:0"
+  referrerpolicy="no-referrer-when-downgrade"
+  src="https://www.google.com/maps/embed/v1/view?key=AIzaSyDZfQ62pORi0-_D7K1AAtM_6TAum26HLfk&center=54.7000,25.2000&zoom=8"
+  allowfullscreen>
+</iframe>
+
+    <div id="map" style="height:400px; width:400px;"></div>
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 54.700, lng: 25.200 },
+                zoom: 8
+            });
+        }
+
+    </script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZfQ62pORi0-_D7K1AAtM_6TAum26HLfk&callback=initMap"></script>
+
 <article>
     <h2>Please enter your city, street and house number here:</h2>
     <br />
