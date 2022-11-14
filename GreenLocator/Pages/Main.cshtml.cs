@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 using GreenLocator.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -28,6 +30,11 @@ public class MainModel : PageModel
 
             AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
+            if(checkIfCurrentUserArgsNull(current) == true)
+            {
+                throw new ArgumentNullException();
+            }
+
             currentUser.City = current.City ?? throw new ArgumentNullException();
             currentUser.Street = current.Street ?? throw new ArgumentNullException();
             currentUser.house = current.House ?? throw new ArgumentNullException();
@@ -49,21 +56,9 @@ public class MainModel : PageModel
             return Page();
 
         }
-        catch (InvalidOperationException ex)
-        {
-            ErrorLogging(ex);
-
-            return RedirectToPage("EnterInfo");
-        }
         catch (ArgumentNullException)
         {
             return RedirectToPage("EnterInfo");
-        }
-        catch (Exception ex)
-        {
-            ErrorLogging(ex);
-
-            return RedirectToPage("Error");
         }
     }
 
@@ -108,6 +103,14 @@ public class MainModel : PageModel
 
             return RedirectToPage("Error");
         }
+    }
+
+    public bool checkIfCurrentUserArgsNull(AspNetUser current)
+    {
+        if (current.City == null || current.Street == null || current.House == null)
+            return true;
+
+        return false;
     }
 
     private void SetCurrentUser<T>(T action, T appliance)

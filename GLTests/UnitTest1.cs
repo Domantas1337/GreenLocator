@@ -30,24 +30,21 @@ namespace GLTests
         }
 
         [Theory, AutoData]
-        public void OnGet_NullArg(IFixture fixture)
+        public void checkCheckIfCurrentUserArgsNull(IFixture fixture)
         {
             fixture.Customize(new AutoMoqCustomization());
-            var context = fixture.Create<GreenLocatorDBContext>();
-
-            fixture.Register((Mock<MainModel> m) => m.Object);
-            var sut = fixture.Create<MainModel>();  // sut - system under test
 
             fixture.Register((Mock<AspNetUser> m) => m.Object);
             var user = fixture.Create<AspNetUser>();
+
+            fixture.Register((Mock<MainModel> m) => m.Object);
+            var sut = fixture.Create<MainModel>();
 
             user.City = null;
             user.Street = null;
             user.House = null;
 
-            Assert.Null(user.City);
-            Assert.Null(user.Street);
-            Assert.Null(user.House);
+            Assert.True(sut.checkIfCurrentUserArgsNull(user));
         }
 
         [Theory, AutoData]
