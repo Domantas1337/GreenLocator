@@ -32,7 +32,7 @@ public class MainModel : PageModel
             currentUser.Street = current.Street ?? throw new ArgumentNullException();
             currentUser.house = current.House ?? throw new ArgumentNullException();
 
-            if (current.CheckIfUsrStatusNull())
+            if (Delegates.CheckUserInfo(Extensions.CheckIfUsrStatusNull, current))
             {
                 current.ShareStatus = 0;
                 current.ThingToShare = 0;
