@@ -60,21 +60,42 @@
 <br />
 <br />
 
-<iframe
-  width="450"
-  height="250"
-  frameborder="0" style="border:0"
-  referrerpolicy="no-referrer-when-downgrade"
-  src="https://www.google.com/maps/embed/v1/view?key=AIzaSyDZfQ62pORi0-_D7K1AAtM_6TAum26HLfk&center=54.7000,25.2000&zoom=8"
-  allowfullscreen>
-</iframe>
+    <p>
+        <script> geocodePosition</script>
+    </p>
 
-    <div id="map" style="height:400px; width:400px;"></div>
+    <div id="map" style="height:500px; width:100%;"></div>
     <script>
         function initMap() {
+            var location = { lat: 54.700, lng: 25.200 };
+
             var map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: 54.700, lng: 25.200 },
-                zoom: 8
+                center: location,
+                zoom: 10
+            });
+
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                draggable: true
+
+            });
+
+                google.maps.event.addListener(marker, 'dragend', function () {
+                updateMarkerStatus('Drag ended');
+                geocodePosition(marker.getPosition());
+            });
+        }
+
+        function geocodePosition(pos) {
+            geocoder.geocode({
+                latLng: pos
+            }, function (responses) {
+                if (responses && responses.length > 0) {
+                    updateMarkerAddress(responses[0].formatted_address);
+                } else {
+                    updateMarkerAddress('Cannot determine address at this location.');
+                }
             });
         }
 
