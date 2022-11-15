@@ -101,21 +101,21 @@ namespace GLTests
 
             Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
 
-            //user.Street = "Gelezinio Vilko";
+            user.Street = "Gelezinio Vilko";
 
-            //Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
+            Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
 
-            //user.Street = "Visoriu sodu 1-oji";
+            user.Street = "Visoriu sodu 1-oji";
 
-            //Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
+            Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
 
-            //user.Street = "Dariaus ir Gireno";
+            user.Street = "Dariaus ir Gireno";
 
-            //Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
+            Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
 
-            //user.City = "Senieji Trakai";
+            user.City = "Senieji Trakai";
 
-            //Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));  
+            Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));  
 
             user.City = "";
 
