@@ -78,7 +78,7 @@ public class EnterInfoModel : PageModel
 
     }
 
-    private bool InputValidation(string city, string street, int house)
+    public bool InputValidation(string city, string street, int house)
     {
         if (CheckString(city) && CheckString(street) && CheckHouse(house))
         {
@@ -92,7 +92,7 @@ public class EnterInfoModel : PageModel
 
     private static bool CheckString(string input)
     {
-        string pattern = "^[a-zA-Z]{3,50}$";
+        string pattern = "^[a-zA-Z0-9 -]{3,50}$";
 
         Regex rx = new Regex(pattern);
 
