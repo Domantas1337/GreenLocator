@@ -83,5 +83,43 @@ namespace GLTests
 
 
         }
+
+        [Theory, AutoData]
+        public void checkInputValidation(IFixture fixture)
+        {
+            fixture.Customize(new AutoMoqCustomization());
+
+            fixture.Register((Mock<AspNetUser> m) => m.Object);
+            var user = fixture.Create<AspNetUser>();
+
+            fixture.Register((Mock<EnterInfoModel> m) => m.Object);
+            var sut = fixture.Create<EnterInfoModel>();
+
+            user.City = "Vilnius";
+            user.Street = "Jeruzales";
+            user.House = 4;
+
+            Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
+
+            //user.Street = "Gelezinio Vilko";
+
+            //Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
+
+            //user.Street = "Visoriu sodu 1-oji";
+
+            //Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
+
+            //user.Street = "Dariaus ir Gireno";
+
+            //Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
+
+            //user.City = "Senieji Trakai";
+
+            //Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));  
+
+            user.City = "";
+
+            Assert.False(sut.InputValidation(user.City, user.Street, (int)user.House));
+        }
     }
 }
