@@ -85,17 +85,15 @@ namespace GLTests
         }
 
         [Theory, AutoData]
-        [InlineData("Vilnius", "Jeruzales", 4)]
-        [InlineData("Vilnius", "Gelezinio Vilko", 15)]
-        [InlineData("Vilnius", "Visoriu sodu 1-oji", 78)]
-        [InlineData("Vilnius", "Dariaus ir Gireno", 56)]
-        [InlineData("Vilnius", "Senieji Trakai", 25)]
-        [InlineData("Ukmerge", "Vytauto", 69)]
-        [InlineData("Ukmerge", "Kauno", 55)]
-        public void checkInputValidation(string City, string Street, int House)
+        [InlineAutoData("Vilnius", "Jeruzales", 4)]
+        [InlineAutoData("Vilnius", "Gelezinio Vilko", 15)]
+        [InlineAutoData("Vilnius", "Visoriu sodu 1-oji", 78)]
+        [InlineAutoData("Vilnius", "Dariaus ir Gireno", 56)]
+        [InlineAutoData("Vilnius", "Senieji Trakai", 25)]
+        [InlineAutoData("Ukmerge", "Vytauto", 69)]
+        [InlineAutoData("Ukmerge", "Kauno", 55)]
+        public void checkInputValidation(string City, string Street, int House, IFixture fixture)
         {
-            var fixture = new Fixture();
-
             fixture.Customize(new AutoMoqCustomization());
 
             fixture.Register((Mock<AspNetUser> m) => m.Object);
