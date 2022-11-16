@@ -121,5 +121,27 @@ namespace GLTests
 
             Assert.False(sut.InputValidation(user.City, user.Street, (int)user.House));
         }
+
+        /*[Theory]
+        [InlineAutoData("FIXTURE")]
+        /*[InlineData("Vilnius", "Gelezinio Vilko", 4)]
+        [InlineData("Vilnius", "Visoriu sodu 1-oji", 4)]
+        [InlineData("Vilnius", "Dariaus ir Gireno", 4)]
+        [InlineData("Vilnius", "Senieji Trakai", 4)]
+
+        public void checkInputValidationwithInline(IFixture fixture, string city, string street, int house)
+        {
+            fixture.Customize(new AutoMoqCustomization());
+
+            fixture.Register((Mock<AspNetUser> m) => m.Object);
+            var user = fixture.Create<AspNetUser>();
+
+            fixture.Register((Mock<EnterInfoModel> m) => m.Object);
+            var sut = fixture.Create<EnterInfoModel>();
+
+            Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
+        }*/
+        
+
     }
 }
