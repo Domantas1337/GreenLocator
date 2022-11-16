@@ -11,12 +11,13 @@
 
     public string Values(string input)
     {
-        if (User.Identity == null)
+
+        AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+
+        if (Delegates.CheckUserInfo(Extensions.CheckIfUsrNull, current))
         {
             return "error";
         }
-
-        AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
         if (input == "City")
         {
