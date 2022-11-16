@@ -48,7 +48,16 @@ namespace GLTests
         }
 
         [Theory, AutoData]
-        public void Extensions_Test(IFixture fixture)
+        [InlineAutoData("Vilnius", "Jeruzales", 4, 1, 2)]
+        [InlineAutoData("Vilnius", "Gelezinio Vilko", 15, 0, 2)]
+        [InlineAutoData("Vilnius", "Visoriu sodu 1-oji", 78, 1, 0)]
+        [InlineAutoData("Vilnius", "Dariaus ir Gireno", 56, 2, 1)]
+        [InlineAutoData("Vilnius", "Didlaukio", 25, 0, 0)]
+        [InlineAutoData("Ukmerge", "Vytauto", 69, 1, 1)]
+        [InlineAutoData("Ukmerge", "Kauno", 55, 2, 2)]
+        [InlineAutoData("Naujoji Akmene", "J. Dalinkeviciaus", 37, 2, 0)]
+        public void Extensions_Test(string City, string Street, int House, 
+            int ShareStatus, int ThingToShare, IFixture fixture)
         {
             fixture.Register((Mock<AspNetUser> m) => m.Object);
             var user = fixture.Create<AspNetUser>();
@@ -63,25 +72,20 @@ namespace GLTests
             Assert.True(Extensions.CheckIfUsrFieldsNull(user));
             Assert.True(Extensions.CheckIfUsrStatusNull(user));
 
-            user.City = "Vilnius";
-            user.Street = "Didlaukio";
-            user.House = 59;
-            user.ShareStatus = 1;
-            user.ThingToShare = 2;
+            user.City = City;
+            user.Street = Street;
+            user.House = House;
+            user.ShareStatus = ShareStatus;
+            user.ThingToShare = ThingToShare;
 
             Assert.False(Extensions.CheckIfUsrFieldsNull(user));
             Assert.False(Extensions.CheckIfUsrStatusNull(user));
 
-            user.City = "Vilnius";
-            user.Street = "Didlaukio";
             user.House = null;
-            user.ShareStatus = 1;
             user.ThingToShare = null;
 
             Assert.True(Extensions.CheckIfUsrFieldsNull(user));
             Assert.True(Extensions.CheckIfUsrStatusNull(user));
-
-
         }
 
         [Theory, AutoData]
@@ -89,9 +93,10 @@ namespace GLTests
         [InlineAutoData("Vilnius", "Gelezinio Vilko", 15)]
         [InlineAutoData("Vilnius", "Visoriu sodu 1-oji", 78)]
         [InlineAutoData("Vilnius", "Dariaus ir Gireno", 56)]
-        [InlineAutoData("Vilnius", "Senieji Trakai", 25)]
+        [InlineAutoData("Vilnius", "Didlaukio", 25)]
         [InlineAutoData("Ukmerge", "Vytauto", 69)]
         [InlineAutoData("Ukmerge", "Kauno", 55)]
+        [InlineAutoData("Naujoji Akmene", "J. Dalinkeviciaus", 37)]
         public void checkInputValidation(string City, string Street, int House, IFixture fixture)
         {
             fixture.Customize(new AutoMoqCustomization());
