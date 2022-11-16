@@ -35,9 +35,9 @@ public class MainModel : PageModel
                 throw new ArgumentNullException();
             }
 
-            currentUser.City = current.City ?? throw new ArgumentNullException();
-            currentUser.Street = current.Street ?? throw new ArgumentNullException();
-            currentUser.house = current.House ?? throw new ArgumentNullException();
+            currentUser.City = current.City!;
+            currentUser.Street = current.Street!;
+            currentUser.house = current.House??0;
 
             if (Delegates.CheckUserInfo(Extensions.CheckIfUsrStatusNull, current))
             {
