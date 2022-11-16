@@ -85,8 +85,17 @@ namespace GLTests
         }
 
         [Theory, AutoData]
-        public void checkInputValidation(IFixture fixture)
+        [InlineData("Vilnius", "Jeruzales", 4)]
+        [InlineData("Vilnius", "Gelezinio Vilko", 15)]
+        [InlineData("Vilnius", "Visoriu sodu 1-oji", 78)]
+        [InlineData("Vilnius", "Dariaus ir Gireno", 56)]
+        [InlineData("Vilnius", "Senieji Trakai", 25)]
+        [InlineData("Ukmerge", "Vytauto", 69)]
+        [InlineData("Ukmerge", "Kauno", 55)]
+        public void checkInputValidation(string City, string Street, int House)
         {
+            var fixture = new Fixture();
+
             fixture.Customize(new AutoMoqCustomization());
 
             fixture.Register((Mock<AspNetUser> m) => m.Object);
@@ -95,27 +104,11 @@ namespace GLTests
             fixture.Register((Mock<EnterInfoModel> m) => m.Object);
             var sut = fixture.Create<EnterInfoModel>();
 
-            user.City = "Vilnius";
-            user.Street = "Jeruzales";
-            user.House = 4;
+            user.City = City;
+            user.Street = Street;
+            user.House = House;
 
             Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
-
-            user.Street = "Gelezinio Vilko";
-
-            Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
-
-            user.Street = "Visoriu sodu 1-oji";
-
-            Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
-
-            user.Street = "Dariaus ir Gireno";
-
-            Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
-
-            user.City = "Senieji Trakai";
-
-            Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));  
 
             user.City = "";
 
