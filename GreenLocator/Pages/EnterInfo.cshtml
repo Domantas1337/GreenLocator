@@ -121,8 +121,6 @@
 
         google.maps.event.addListener(marker, 'dragend', function () {
             geocodePosition(marker.getPosition());
-            address = marker.formatted_address;
-            document.getElementById('Address').value = address;
         });
     }
 
@@ -132,6 +130,8 @@
         }, function (responses) {
             if (responses && responses.length > 0) {
                 marker.formatted_address = responses[0].formatted_address;
+                address = marker.formatted_address;
+                document.getElementById('Address').value = address;
             } else {
                 marker.formatted_address = 'Cannot determine address at this location.';
             }
