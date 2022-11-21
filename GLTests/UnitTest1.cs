@@ -97,16 +97,8 @@ namespace GLTests
         [InlineAutoData("Ukmerge", "Vytauto", 69)]
         [InlineAutoData("Ukmerge", "Kauno", 55)]
         [InlineAutoData("Naujoji Akmene", "J. Dalinkeviciaus", 37)]
-        public void checkInputValidation(string City, string Street, int House, IFixture fixture)
+        public void checkInputValidation(string City, string Street, int House)
         {
-            //fixture.Customize(new AutoMoqCustomization());
-
-            //fixture.Register((Mock<AspNetUser> m) => m.Object);
-            //var user = fixture.Create<AspNetUser>();
-
-            //fixture.Register((Mock<EnterInfoModel> m) => m.Object);
-            //var sut = fixture.Create<EnterInfoModel>();
-
             var user = new AspNetUser
             {
                 City = City,
@@ -115,10 +107,6 @@ namespace GLTests
             };
 
             var enterInfoModel = new EnterInfoModel(null);
-
-            //user.City = City;
-            //user.Street = Street;
-            //user.House = House;
 
             Assert.True(enterInfoModel.InputValidation(user.City, user.Street, (int)user.House));
         }        
