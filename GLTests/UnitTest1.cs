@@ -29,22 +29,20 @@ namespace GLTests
             Assert.True(context.Database.CanConnect());
         }
 
-        [Theory, AutoData]
-        public void checkCheckIfCurrentUserArgsNull(IFixture fixture)
+        [Theory]
+        [InlineAutoData(null, null, null)]
+        public void checkCheckIfCurrentUserArgsNull(string City, string Street, int House)
         {
-            fixture.Customize(new AutoMoqCustomization());
+            var user = new AspNetUser
+            {
+                City = City,
+                Street = Street,
+                House = House,
+            };
 
-            fixture.Register((Mock<AspNetUser> m) => m.Object);
-            var user = fixture.Create<AspNetUser>();
+            var MainModel = new MainModel(null);
 
-            fixture.Register((Mock<MainModel> m) => m.Object);
-            var sut = fixture.Create<MainModel>();
-
-            user.City = null;
-            user.Street = null;
-            user.House = null;
-
-            Assert.True(sut.checkIfCurrentUserArgsNull(user));
+            Assert.True(MainModel.checkIfCurrentUserArgsNull(user));
         }
 
         [Theory, AutoData]
