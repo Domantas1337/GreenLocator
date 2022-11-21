@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using GreenLocator.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace GreenLocator.Pages;
 
@@ -15,12 +16,13 @@ public class MainModel : PageModel
     }
 
     public UserInfo currentUser = new();
+    public static int currentNumberOfMatches { get; set; } = 0;
 
     public string? ActionInput;
     public string? ApplianceInput;
 
     public IActionResult OnGet()
-    {   
+    {
         try
         {
             if (User.Identity == null)
@@ -30,14 +32,14 @@ public class MainModel : PageModel
 
             AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
-            if(checkIfCurrentUserArgsNull(current) == true)
+            if (checkIfCurrentUserArgsNull(current) == true)
             {
                 throw new ArgumentNullException();
             }
 
             currentUser.City = current.City!;
             currentUser.Street = current.Street!;
-            currentUser.house = current.House??0;
+            currentUser.house = current.House ?? 0;
 
             if (Delegates.CheckUserInfo(Extensions.CheckIfUsrStatusNull, current))
             {
@@ -48,10 +50,16 @@ public class MainModel : PageModel
             }
             else
             {
-                currentUser.ShareStatus = (Status)current.ShareStatus; // warnings after extension method implementation
-                currentUser.ThingToShare = (Appliance)current.ThingToShare;
+                currentUser.ShareStatus = (Status)current.ShareStatus!;
+                currentUser.ThingToShare = (Appliance)current.ThingToShare!;
 
             }
+
+            ParameterizedThreadStart notifThreadStart = new(NumOfMatchedPeople!);
+            Thread notifThread = new Thread(notifThreadStart);
+
+            object args = new object[2] { _context, current };
+            notifThread.Start(args);
 
             return Page();
 
@@ -118,11 +126,11 @@ public class MainModel : PageModel
         switch (action)
         {
             case "Borrow":
-                currentUser.ShareStatus = (Status) 1;
+                currentUser.ShareStatus = (Status)1;
                 break;
 
             case "Offer":
-                currentUser.ShareStatus = (Status) 2;
+                currentUser.ShareStatus = (Status)2;
                 break;
 
             default:
@@ -132,11 +140,11 @@ public class MainModel : PageModel
         switch (appliance)
         {
             case "Washing machine":
-                currentUser.ThingToShare = (Appliance) 1;
+                currentUser.ThingToShare = (Appliance)1;
                 break;
 
             case "Oven":
-                currentUser.ThingToShare = (Appliance) 2;
+                currentUser.ThingToShare = (Appliance)2;
                 break;
 
             default:
@@ -161,6 +169,51 @@ public class MainModel : PageModel
                 writer.WriteLine("StackTrace : " + ex.StackTrace);
             }
         }
+    }
+
+    static void NumOfMatchedPeople(object args)
+    {
+        Array argArray = new Object[2];
+        argArray = (Array)args;
+
+
+        try
+        {
+            //GreenLocatorDBContext? context = (GreenLocatorDBContext)argArray.GetValue(0)!;
+            AspNetUser current = (AspNetUser)argArray.GetValue(1)!;
+            //int currentNumberOfMatches = (int)argArray.GetValue(2)!;
+
+            using GreenLocatorDBContext context = new GreenLocatorDBContext();
+
+            currentNumberOfMatches = context.AspNetUsers.Count(usr => usr.City == current.City && usr.Street == current.Street
+                                       && usr.House == current.House && usr.ThingToShare == current.ThingToShare
+                                       && usr.ShareStatus != current.ShareStatus);
+
+            while (true)
+            {
+                Thread.Sleep(1000);
+                int temp = context.AspNetUsers.Count(usr => usr.City == current.City && usr.Street == current.Street
+                                            && usr.House == current.House && usr.ThingToShare == current.ThingToShare
+                                            && usr.ShareStatus != current.ShareStatus);
+                if (temp > currentNumberOfMatches)
+                {
+                    currentNumberOfMatches = temp;
+                }
+                else if (temp < currentNumberOfMatches)
+                {
+                    currentNumberOfMatches = temp;
+                }
+            }
+        }
+        catch (ArgumentException)
+        {
+
+        }
+        catch (IndexOutOfRangeException)
+        {
+
+        }
+        
     }
 }
 

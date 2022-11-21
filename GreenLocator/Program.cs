@@ -19,7 +19,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
 
 // Dependency injection:
-builder.Services.AddScoped<GreenLocatorDBContext>();
+builder.Services.AddTransient<GreenLocatorDBContext>();
 builder.Services.AddScoped<AspNetUser>();
 builder.Services.AddScoped<MainModel>();
 
