@@ -30,8 +30,8 @@ namespace GLTests
         }
 
         [Theory]
-        [InlineAutoData(null, null, null)]
-        public void checkCheckIfCurrentUserArgsNull(string City, string Street, int House)
+        [InlineData(null, null, null)]
+        public void checkCheckIfCurrentUserArgsNull(string? City, string? Street, int? House)
         {
             var user = new AspNetUser
             {
@@ -45,15 +45,15 @@ namespace GLTests
             Assert.True(MainModel.checkIfCurrentUserArgsNull(user));
         }
 
-        [Theory, AutoData]
-        [InlineAutoData("Vilnius", "Jeruzales", 4, 1, 2)]
-        [InlineAutoData("Vilnius", "Gelezinio Vilko", 15, 0, 2)]
-        [InlineAutoData("Vilnius", "Visoriu sodu 1-oji", 78, 1, 0)]
-        [InlineAutoData("Vilnius", "Dariaus ir Gireno", 56, 2, 1)]
-        [InlineAutoData("Vilnius", "Didlaukio", 25, 0, 0)]
-        [InlineAutoData("Ukmerge", "Vytauto", 69, 1, 1)]
-        [InlineAutoData("Ukmerge", "Kauno", 55, 2, 2)]
-        [InlineAutoData("Naujoji Akmene", "J. Dalinkeviciaus", 37, 2, 0)]
+        [Theory]
+        [InlineData("Vilnius", "Jeruzales", 4, 1, 2)]
+        [InlineData("Vilnius", "Gelezinio Vilko", 15, 0, 2)]
+        [InlineData("Vilnius", "Visoriu sodu 1-oji", 78, 1, 0)]
+        [InlineData("Vilnius", "Dariaus ir Gireno", 56, 2, 1)]
+        [InlineData("Vilnius", "Didlaukio", 25, 0, 0)]
+        [InlineData("Ukmerge", "Vytauto", 69, 1, 1)]
+        [InlineData("Ukmerge", "Kauno", 55, 2, 2)]
+        [InlineData("Naujoji Akmene", "J. Dalinkeviciaus", 37, 2, 0)]
         public void Extensions_TestWhenAllValuesNotNull(string City, string Street, int House, 
             int ShareStatus, int ThingToShare)
         {
@@ -104,14 +104,14 @@ namespace GLTests
         }
 
         [Theory]
-        [InlineAutoData("Vilnius", "Jeruzales", 4)]
-        [InlineAutoData("Vilnius", "Gelezinio Vilko", 15)]
-        [InlineAutoData("Vilnius", "Visoriu sodu 1-oji", 78)]
-        [InlineAutoData("Vilnius", "Dariaus ir Gireno", 56)]
-        [InlineAutoData("Vilnius", "Didlaukio", 25)]
-        [InlineAutoData("Ukmerge", "Vytauto", 69)]
-        [InlineAutoData("Ukmerge", "Kauno", 55)]
-        [InlineAutoData("Naujoji Akmene", "J. Dalinkeviciaus", 37)]
+        [InlineData("Vilnius", "Jeruzales", 4)]
+        [InlineData("Vilnius", "Gelezinio Vilko", 15)]
+        [InlineData("Vilnius", "Visoriu sodu 1-oji", 78)]
+        [InlineData("Vilnius", "Dariaus ir Gireno", 56)]
+        [InlineData("Vilnius", "Didlaukio", 25)]
+        [InlineData("Ukmerge", "Vytauto", 69)]
+        [InlineData("Ukmerge", "Kauno", 55)]
+        [InlineData("Naujoji Akmene", "J. Dalinkeviciaus", 37)]
         public void checkInputValidation(string City, string Street, int House)
         {
             var user = new AspNetUser
