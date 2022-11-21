@@ -54,21 +54,17 @@ namespace GLTests
         [InlineAutoData("Ukmerge", "Vytauto", 69, 1, 1)]
         [InlineAutoData("Ukmerge", "Kauno", 55, 2, 2)]
         [InlineAutoData("Naujoji Akmene", "J. Dalinkeviciaus", 37, 2, 0)]
-        public void Extensions_Test(string City, string Street, int House, 
-            int ShareStatus, int ThingToShare, IFixture fixture)
+        public void Extensions_TestWhenAllValuesNotNull(string City, string Street, int House, 
+            int ShareStatus, int ThingToShare)
         {
-            fixture.Register((Mock<AspNetUser> m) => m.Object);
-            var user = fixture.Create<AspNetUser>();
-
-            user.City = null;
-            user.Street = null;
-            user.House = null;
-            user.ShareStatus = null;
-            user.ThingToShare = null;
-
-            Assert.False(Extensions.CheckIfUsrNull(user));
-            Assert.True(Extensions.CheckIfUsrFieldsNull(user));
-            Assert.True(Extensions.CheckIfUsrStatusNull(user));
+            var user = new AspNetUser
+            {
+                City = City,
+                Street = Street,
+                House = House,
+                ShareStatus = ShareStatus,
+                ThingToShare = ThingToShare,
+            };
 
             user.City = City;
             user.Street = Street;
@@ -78,12 +74,33 @@ namespace GLTests
 
             Assert.False(Extensions.CheckIfUsrFieldsNull(user));
             Assert.False(Extensions.CheckIfUsrStatusNull(user));
+            Assert.False(Extensions.CheckIfUsrNull(user));
+        }
 
-            user.House = null;
-            user.ThingToShare = null;
+        [Theory]
+        [InlineData(null, null, null, null, null)]
+        [InlineData("Vilnius", null, null, null, null)]
+        [InlineData("Vilnius", "Visoriu sodu 1-oji", null, null, 0)]
+        [InlineData(null, "Dariaus ir Gireno", null, null, null)]
+        [InlineData(null, "Didlaukio", 25, 0, null)]
+        [InlineData("Ukmerge", "Vytauto", null, 0, null)]
+        [InlineData("Ukmerge", null, 55, 2, null)]
+        [InlineData("Naujoji Akmene", null, 37, null, null)]
+        public void Extensions_TestWhenSomeValuesAreNull(string? City, string? Street, int? House,
+           int? ShareStatus, int? ThingToShare)
+        {
+            var user = new AspNetUser
+            {
+                City = City,
+                Street = Street,
+                House = House,
+                ShareStatus = ShareStatus,
+                ThingToShare = ThingToShare,
+            };
 
-            Assert.True(Extensions.CheckIfUsrFieldsNull(user));
-            Assert.True(Extensions.CheckIfUsrStatusNull(user));
+             Assert.False(Extensions.CheckIfUsrNull(user));
+             Assert.True(Extensions.CheckIfUsrFieldsNull(user));
+             Assert.True(Extensions.CheckIfUsrStatusNull(user));
         }
 
         [Theory]
