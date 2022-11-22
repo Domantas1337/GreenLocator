@@ -94,12 +94,33 @@ public class MainModel : PageModel
 
             SetCurrentUser(ActionInput, ApplianceInput);
 
-            await task;
-
-            current.ShareStatus = (int)currentUser.ShareStatus;
+            Monitor.Enter(current);
+            try
+            {
+                current.ShareStatus = (int)currentUser.ShareStatus;
                 current.ThingToShare = (int)currentUser.ThingToShare;
+            }
+            catch (Exception) { }
+            Monitor.Exit(current);
 
-            
+            Monitor.Enter(currentNumberOfMatches);
+            Monitor.Enter(_context);
+
+            try
+            {
+                if (checkIfCurrentUserArgsNull(current))
+                {
+                    currentNumberOfMatches = 0;
+                    _context.SaveChanges();
+                    return Page();
+                }
+            }
+            catch (Exception) { }
+            await task;
+            Monitor.Exit(currentNumberOfMatches);
+            Monitor.Exit(_context);
+
+
 
             _context.SaveChanges();
 
@@ -220,6 +241,11 @@ public class MainModel : PageModel
         {
         }
     }
+}
+
+public class MatchStatus
+{
+
 }
 
 public enum Status
