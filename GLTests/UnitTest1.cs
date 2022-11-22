@@ -29,48 +29,42 @@ namespace GLTests
             Assert.True(context.Database.CanConnect());
         }
 
-        [Theory, AutoData]
-        public void checkCheckIfCurrentUserArgsNull(IFixture fixture)
+        [Theory]
+        [InlineData(null, null, null)]
+        public void checkCheckIfCurrentUserArgsNull(string? City, string? Street, int? House)
         {
-            fixture.Customize(new AutoMoqCustomization());
+            var user = new AspNetUser
+            {
+                City = City,
+                Street = Street,
+                House = House,
+            };
 
-            fixture.Register((Mock<AspNetUser> m) => m.Object);
-            var user = fixture.Create<AspNetUser>();
+            var MainModel = new MainModel(null);
 
-            fixture.Register((Mock<MainModel> m) => m.Object);
-            var sut = fixture.Create<MainModel>();
-
-            user.City = null;
-            user.Street = null;
-            user.House = null;
-
-            Assert.True(sut.checkIfCurrentUserArgsNull(user));
+            Assert.True(MainModel.checkIfCurrentUserArgsNull(user));
         }
 
-        [Theory, AutoData]
-        [InlineAutoData("Vilnius", "Jeruzales", 4, 1, 2)]
-        [InlineAutoData("Vilnius", "Gelezinio Vilko", 15, 0, 2)]
-        [InlineAutoData("Vilnius", "Visoriu sodu 1-oji", 78, 1, 0)]
-        [InlineAutoData("Vilnius", "Dariaus ir Gireno", 56, 2, 1)]
-        [InlineAutoData("Vilnius", "Didlaukio", 25, 0, 0)]
-        [InlineAutoData("Ukmerge", "Vytauto", 69, 1, 1)]
-        [InlineAutoData("Ukmerge", "Kauno", 55, 2, 2)]
-        [InlineAutoData("Naujoji Akmene", "J. Dalinkeviciaus", 37, 2, 0)]
-        public void Extensions_Test(string City, string Street, int House, 
-            int ShareStatus, int ThingToShare, IFixture fixture)
+        [Theory]
+        [InlineData("Vilnius", "Jeruzales", 4, 1, 2)]
+        [InlineData("Vilnius", "Gelezinio Vilko", 15, 0, 2)]
+        [InlineData("Vilnius", "Visoriu sodu 1-oji", 78, 1, 0)]
+        [InlineData("Vilnius", "Dariaus ir Gireno", 56, 2, 1)]
+        [InlineData("Vilnius", "Didlaukio", 25, 0, 0)]
+        [InlineData("Ukmerge", "Vytauto", 69, 1, 1)]
+        [InlineData("Ukmerge", "Kauno", 55, 2, 2)]
+        [InlineData("Naujoji Akmene", "J. Dalinkeviciaus", 37, 2, 0)]
+        public void Extensions_TestWhenAllValuesNotNull(string City, string Street, int House, 
+            int ShareStatus, int ThingToShare)
         {
-            fixture.Register((Mock<AspNetUser> m) => m.Object);
-            var user = fixture.Create<AspNetUser>();
-
-            user.City = null;
-            user.Street = null;
-            user.House = null;
-            user.ShareStatus = null;
-            user.ThingToShare = null;
-
-            Assert.False(Extensions.CheckIfUsrNull(user));
-            Assert.True(Extensions.CheckIfUsrFieldsNull(user));
-            Assert.True(Extensions.CheckIfUsrStatusNull(user));
+            var user = new AspNetUser
+            {
+                City = City,
+                Street = Street,
+                House = House,
+                ShareStatus = ShareStatus,
+                ThingToShare = ThingToShare,
+            };
 
             user.City = City;
             user.Street = Street;
@@ -80,42 +74,56 @@ namespace GLTests
 
             Assert.False(Extensions.CheckIfUsrFieldsNull(user));
             Assert.False(Extensions.CheckIfUsrStatusNull(user));
-
-            user.House = null;
-            user.ThingToShare = null;
-
-            Assert.True(Extensions.CheckIfUsrFieldsNull(user));
-            Assert.True(Extensions.CheckIfUsrStatusNull(user));
+            Assert.False(Extensions.CheckIfUsrNull(user));
         }
 
-        [Theory, AutoData]
-        [InlineAutoData("Vilnius", "Jeruzales", 4)]
-        [InlineAutoData("Vilnius", "Gelezinio Vilko", 15)]
-        [InlineAutoData("Vilnius", "Visoriu sodu 1-oji", 78)]
-        [InlineAutoData("Vilnius", "Dariaus ir Gireno", 56)]
-        [InlineAutoData("Vilnius", "Didlaukio", 25)]
-        [InlineAutoData("Ukmerge", "Vytauto", 69)]
-        [InlineAutoData("Ukmerge", "Kauno", 55)]
-        [InlineAutoData("Naujoji Akmene", "J. Dalinkeviciaus", 37)]
-        public void checkInputValidation(string City, string Street, int House, IFixture fixture)
+        [Theory]
+        [InlineData(null, null, null, null, null)]
+        [InlineData("Vilnius", null, null, null, null)]
+        [InlineData("Vilnius", "Visoriu sodu 1-oji", null, null, 0)]
+        [InlineData(null, "Dariaus ir Gireno", null, null, null)]
+        [InlineData(null, "Didlaukio", 25, 0, null)]
+        [InlineData("Ukmerge", "Vytauto", null, 0, null)]
+        [InlineData("Ukmerge", null, 55, 2, null)]
+        [InlineData("Naujoji Akmene", null, 37, null, null)]
+        public void Extensions_TestWhenSomeValuesAreNull(string? City, string? Street, int? House,
+           int? ShareStatus, int? ThingToShare)
         {
-            fixture.Customize(new AutoMoqCustomization());
+            var user = new AspNetUser
+            {
+                City = City,
+                Street = Street,
+                House = House,
+                ShareStatus = ShareStatus,
+                ThingToShare = ThingToShare,
+            };
 
-            fixture.Register((Mock<AspNetUser> m) => m.Object);
-            var user = fixture.Create<AspNetUser>();
+             Assert.False(Extensions.CheckIfUsrNull(user));
+             Assert.True(Extensions.CheckIfUsrFieldsNull(user));
+             Assert.True(Extensions.CheckIfUsrStatusNull(user));
+        }
 
-            fixture.Register((Mock<EnterInfoModel> m) => m.Object);
-            var sut = fixture.Create<EnterInfoModel>();
+        [Theory]
+        [InlineData("Vilnius", "Jeruzales", 4)]
+        [InlineData("Vilnius", "Gelezinio Vilko", 15)]
+        [InlineData("Vilnius", "Visoriu sodu 1-oji", 78)]
+        [InlineData("Vilnius", "Dariaus ir Gireno", 56)]
+        [InlineData("Vilnius", "Didlaukio", 25)]
+        [InlineData("Ukmerge", "Vytauto", 69)]
+        [InlineData("Ukmerge", "Kauno", 55)]
+        [InlineData("Naujoji Akmene", "J. Dalinkeviciaus", 37)]
+        public void checkInputValidation(string City, string Street, int House)
+        {
+            var user = new AspNetUser
+            {
+                City = City,
+                Street = Street,
+                House = House,
+            };
 
-            user.City = City;
-            user.Street = Street;
-            user.House = House;
+            var enterInfoModel = new EnterInfoModel(null);
 
-            Assert.True(sut.InputValidation(user.City, user.Street, (int)user.House));
-
-            user.City = "";
-
-            Assert.False(sut.InputValidation(user.City, user.Street, (int)user.House));
+            Assert.True(enterInfoModel.InputValidation(user.City, user.Street, (int)user.House));
         }        
     }
 }
