@@ -25,7 +25,11 @@ namespace GLTests
         [InlineData("/")]
         [InlineData("/Index")]
         [InlineData("/Privacy")]
-        //[InlineData("/Main")]
+        [InlineData("/ChatIndex")]
+        [InlineData("/Error")]
+        [InlineData("/Identity/Account/Login")]
+        [InlineData("/Identity/Account/Register")]
+        [InlineData("/Identity/Account/Manage")]
         public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
         {          
             var client = _factory.CreateClient();
