@@ -41,22 +41,5 @@ namespace GLTests
             Assert.Equal("text/html; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
         }
-
-        /*[Theory]
-        [InlineData("/")]
-        public async Task Get_SecurePageRedirectsAnUnauthenticatedUser(string url)
-        {
-            var client = _factory.CreateClient(
-                new WebApplicationFactoryClientOptions
-                {
-                    AllowAutoRedirect = false
-                });
-
-            var response = await client.GetAsync(url);
-
-            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-            Assert.StartsWith("http://localhost/Identity/Account/Login",
-                response.Headers.Location.OriginalString);
-        }*/
     }
 }
