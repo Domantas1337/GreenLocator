@@ -32,6 +32,8 @@ public class MainModel : PageModel
 
             AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
+            //Task numOfMatchedPeopleTask = NumOfMatchedPeople(_context, current);
+
             if (checkIfCurrentUserArgsNull(current) == true)
             {
                 throw new ArgumentNullException();
@@ -55,11 +57,15 @@ public class MainModel : PageModel
 
             }
 
-            ParameterizedThreadStart notifThreadStart = new(NumOfMatchedPeople!);
-            Thread notifThread = new Thread(notifThreadStart);
+            //await numOfMatchedPeopleTask;
 
-            object args = new object[2] { _context, current };
-            notifThread.Start(args);
+            /*ParameterizedThreadStart notifThreadStart = new(NumOfMatchedPeople!);
+            Thread notifThread = new Thread(notifThreadStart);*/
+
+            //object args = new object[2] { _context, current };
+            //notifThread.Start(args);
+
+            //NumOfMatchedPeople(_context, current);
 
             return Page();
 
@@ -70,7 +76,7 @@ public class MainModel : PageModel
         }
     }
 
-    public IActionResult OnPost()
+    public async Task<IActionResult> OnPost()
     {
         try
         {
@@ -81,13 +87,19 @@ public class MainModel : PageModel
 
             AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
+            var task = Task.Run(() => NumOfMatchedPeople(_context, current));
+
             ActionInput = Request.Form["ActionInput"];
             ApplianceInput = Request.Form["ApplianceInput"];
 
             SetCurrentUser(ActionInput, ApplianceInput);
 
+            await task;
+
             current.ShareStatus = (int)currentUser.ShareStatus;
-            current.ThingToShare = (int)currentUser.ThingToShare;
+                current.ThingToShare = (int)currentUser.ThingToShare;
+
+            
 
             _context.SaveChanges();
 
@@ -171,49 +183,42 @@ public class MainModel : PageModel
         }
     }
 
-    static void NumOfMatchedPeople(object args)
+    static void NumOfMatchedPeople(GreenLocatorDBContext context, AspNetUser current)
     {
-        Array argArray = new Object[2];
-        argArray = (Array)args;
-
+        //Array argArray = new Object[2];
+        //argArray = (Array)args;
 
         try
         {
             //GreenLocatorDBContext? context = (GreenLocatorDBContext)argArray.GetValue(0)!;
-            AspNetUser current = (AspNetUser)argArray.GetValue(1)!;
+            //AspNetUser current = (AspNetUser)argArray.GetValue(1)!;
             //int currentNumberOfMatches = (int)argArray.GetValue(2)!;
 
-            using GreenLocatorDBContext context = new GreenLocatorDBContext();
+            //using GreenLocatorDBContext context = new GreenLocatorDBContext();
 
-            currentNumberOfMatches = context.AspNetUsers.Count(usr => usr.City == current.City && usr.Street == current.Street
-                                       && usr.House == current.House && usr.ThingToShare == current.ThingToShare
-                                       && usr.ShareStatus != current.ShareStatus);
 
-            while (true)
+            int temp = context.AspNetUsers.Count(usr => usr.City == current.City && usr.Street == current.Street
+                                   && usr.House == current.House && usr.ThingToShare == current.ThingToShare
+                                   && usr.ShareStatus != current.ShareStatus);
+
+            if (temp > currentNumberOfMatches)
             {
-                Thread.Sleep(1000);
-                int temp = context.AspNetUsers.Count(usr => usr.City == current.City && usr.Street == current.Street
-                                            && usr.House == current.House && usr.ThingToShare == current.ThingToShare
-                                            && usr.ShareStatus != current.ShareStatus);
-                if (temp > currentNumberOfMatches)
-                {
-                    currentNumberOfMatches = temp;
-                }
-                else if (temp < currentNumberOfMatches)
-                {
-                    currentNumberOfMatches = temp;
-                }
+                currentNumberOfMatches = temp;
+            }
+            else if (temp < currentNumberOfMatches)
+            {
+                currentNumberOfMatches = temp;
             }
         }
         catch (ArgumentException)
         {
-
         }
         catch (IndexOutOfRangeException)
         {
-
         }
-        
+        catch (System.ObjectDisposedException)
+        {
+        }
     }
 }
 
