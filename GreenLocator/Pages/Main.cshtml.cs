@@ -39,7 +39,7 @@ public class MainModel : PageModel
 
             currentUser.City = current.City!;
             currentUser.Street = current.Street!;
-            currentUser.house = current.House ?? 0;
+            currentUser.house = current.House??0;
 
             if (Delegates.CheckUserInfo(Extensions.CheckIfUsrStatusNull, current))
             {
