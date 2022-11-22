@@ -32,8 +32,6 @@ public class MainModel : PageModel
 
             AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
-            //Task numOfMatchedPeopleTask = NumOfMatchedPeople(_context, current);
-
             if (checkIfCurrentUserArgsNull(current) == true)
             {
                 throw new ArgumentNullException();
@@ -57,16 +55,6 @@ public class MainModel : PageModel
 
             }
 
-            //await numOfMatchedPeopleTask;
-
-            /*ParameterizedThreadStart notifThreadStart = new(NumOfMatchedPeople!);
-            Thread notifThread = new Thread(notifThreadStart);*/
-
-            //object args = new object[2] { _context, current };
-            //notifThread.Start(args);
-
-            //NumOfMatchedPeople(_context, current);
-
             return Page();
 
         }
@@ -76,7 +64,7 @@ public class MainModel : PageModel
         }
     }
 
-    public async Task<IActionResult> OnPost()
+    public IActionResult OnPost()
     {
         try
         {
@@ -87,42 +75,26 @@ public class MainModel : PageModel
 
             AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
-            var task = Task.Run(() => NumOfMatchedPeople(_context, current));
-
             ActionInput = Request.Form["ActionInput"];
             ApplianceInput = Request.Form["ApplianceInput"];
 
             SetCurrentUser(ActionInput, ApplianceInput);
+            _context.SaveChanges();
 
-            Monitor.Enter(current);
-            try
+            ParameterizedThreadStart notifThreadStart = new(NumOfMatchedPeople!);
+            Thread notifThread = new Thread(notifThreadStart);
+
+            object args = new object[2] { _context, current };
+
+            notifThread.Start(args);
+
+            lock (current)
             {
                 current.ShareStatus = (int)currentUser.ShareStatus;
                 current.ThingToShare = (int)currentUser.ThingToShare;
             }
-            catch (Exception) { }
-            Monitor.Exit(current);
 
-            Monitor.Enter(currentNumberOfMatches);
-            Monitor.Enter(_context);
-
-            try
-            {
-                if (checkIfCurrentUserArgsNull(current))
-                {
-                    currentNumberOfMatches = 0;
-                    _context.SaveChanges();
-                    return Page();
-                }
-            }
-            catch (Exception) { }
-            await task;
-            Monitor.Exit(currentNumberOfMatches);
-            Monitor.Exit(_context);
-
-
-
-            _context.SaveChanges();
+            notifThread.Join();
 
             return Page();
         }
@@ -204,48 +176,40 @@ public class MainModel : PageModel
         }
     }
 
-    static void NumOfMatchedPeople(GreenLocatorDBContext context, AspNetUser current)
+    static void NumOfMatchedPeople(object args)
     {
-        //Array argArray = new Object[2];
-        //argArray = (Array)args;
+            Array argArray = new Object[2];
+            argArray = (Array)args;
 
-        try
-        {
-            //GreenLocatorDBContext? context = (GreenLocatorDBContext)argArray.GetValue(0)!;
-            //AspNetUser current = (AspNetUser)argArray.GetValue(1)!;
-            //int currentNumberOfMatches = (int)argArray.GetValue(2)!;
-
-            //using GreenLocatorDBContext context = new GreenLocatorDBContext();
-
-
-            int temp = context.AspNetUsers.Count(usr => usr.City == current.City && usr.Street == current.Street
-                                   && usr.House == current.House && usr.ThingToShare == current.ThingToShare
-                                   && usr.ShareStatus != current.ShareStatus);
-
-            if (temp > currentNumberOfMatches)
+            try
             {
-                currentNumberOfMatches = temp;
+                GreenLocatorDBContext? context = (GreenLocatorDBContext)argArray.GetValue(0)!;
+                AspNetUser current = (AspNetUser)argArray.GetValue(1)!;
+
+                    int temp = context.AspNetUsers.Count(usr => usr.City == current.City && usr.Street == current.Street
+                                       && usr.House == current.House && usr.ThingToShare == current.ThingToShare
+                                       && usr.ShareStatus != current.ShareStatus && current.Id != usr.Id);
+
+                    if (temp > currentNumberOfMatches)
+                    {
+                        currentNumberOfMatches = temp;
+                    }
+                    else if (temp < currentNumberOfMatches)
+                    {
+                        currentNumberOfMatches = temp;
+                    }
             }
-            else if (temp < currentNumberOfMatches)
+
+            catch (ArgumentException)
             {
-                currentNumberOfMatches = temp;
+            }
+            catch (IndexOutOfRangeException)
+            {
+            }
+            catch (ObjectDisposedException)
+            {
             }
         }
-        catch (ArgumentException)
-        {
-        }
-        catch (IndexOutOfRangeException)
-        {
-        }
-        catch (System.ObjectDisposedException)
-        {
-        }
-    }
-}
-
-public class MatchStatus
-{
-
 }
 
 public enum Status
