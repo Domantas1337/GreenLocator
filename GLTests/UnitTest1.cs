@@ -8,6 +8,7 @@ using AutoFixture.AutoMoq;
 using GreenLocator.Pages;
 using NuGet.Frameworks;
 using System.Net.WebSockets;
+using System.IO;
 
 namespace GLTests
 {
@@ -40,7 +41,7 @@ namespace GLTests
                 House = House,
             };
 
-            var MainModel = new MainModel(null);
+            var MainModel = new MainModel(null!);
 
             Assert.True(MainModel.checkIfCurrentUserArgsNull(user));
         }
@@ -124,6 +125,56 @@ namespace GLTests
             var enterInfoModel = new EnterInfoModel(null);
 
             Assert.True(enterInfoModel.InputValidation(user.City, user.Street, (int)user.House));
-        }        
+        }
+
+        [Theory]
+        [InlineData("Vilnius", "didlaukio", 47, 2, 1)]
+        [InlineData("Vilnius", "didlaukio", 47, 1, 1)]
+        [InlineData("Vilnius", "didlaukio", 47, 1, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 0, 1)]
+        [InlineData("Vilnius", "didlaukio", 47, 0, 0)]
+        [InlineData("Vilnius", "didlaukio", 48, 2, 2)]
+        [InlineData("Vilnius", "didlaukijo", 47, 2, 2)]
+        public void CheckNumOfMatchedPeople0(string? City, string? Street, int? House, int? shareStatus, int? thingToShare)
+        {
+            GreenLocatorDBContext context = new GreenLocatorDBContext();
+
+            var user = new AspNetUser
+            {
+                City = City,
+                Street = Street,
+                House = House,
+                ShareStatus = shareStatus,
+                ThingToShare = thingToShare
+            };
+
+            object args = new object[2] { context, user };
+
+            MainModel.NumOfMatchedPeople(args);
+
+            Assert.Equal(0, MainModel.currentNumberOfMatches);
+        }
+
+        [Theory]
+        [InlineData("Vilnius", "didlaukio", 47, 2, 2)]
+        public void CheckNumOfMatchedPeople1(string? City, string? Street, int? House, int? shareStatus, int? thingToShare)
+        {
+            GreenLocatorDBContext context = new GreenLocatorDBContext();
+
+            var user = new AspNetUser
+            {
+                City = City,
+                Street = Street,
+                House = House,
+                ShareStatus = shareStatus,
+                ThingToShare = thingToShare
+            };
+
+            object args = new object[2] { context, user };
+
+            MainModel.NumOfMatchedPeople(args);
+
+            Assert.Equal(1, MainModel.currentNumberOfMatches);
+        }
     }
 }
