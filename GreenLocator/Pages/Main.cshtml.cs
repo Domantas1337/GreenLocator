@@ -176,7 +176,7 @@ public class MainModel : PageModel
         }
     }
 
-    static void NumOfMatchedPeople(object args)
+    public static void NumOfMatchedPeople(object args)
     {
             Array argArray = new Object[2];
             argArray = (Array)args;
@@ -186,28 +186,31 @@ public class MainModel : PageModel
                 GreenLocatorDBContext? context = (GreenLocatorDBContext)argArray.GetValue(0)!;
                 AspNetUser current = (AspNetUser)argArray.GetValue(1)!;
 
-                    int temp = context.AspNetUsers.Count(usr => usr.City == current.City && usr.Street == current.Street
-                                       && usr.House == current.House && usr.ThingToShare == current.ThingToShare
-                                       && usr.ShareStatus != current.ShareStatus && current.Id != usr.Id);
-
-                    if (temp > currentNumberOfMatches)
-                    {
-                        currentNumberOfMatches = temp;
-                    }
-                    else if (temp < currentNumberOfMatches)
-                    {
-                        currentNumberOfMatches = temp;
-                    }
+                int temp = context.AspNetUsers.Count(usr => usr.City == current.City && usr.Street == current.Street
+                                   && usr.House == current.House && usr.ThingToShare == current.ThingToShare
+                                   && usr.ShareStatus != current.ShareStatus && current.Id != usr.Id);
+        
+                if (temp > currentNumberOfMatches)
+                {
+                    currentNumberOfMatches = temp;
+                }
+                else if (temp < currentNumberOfMatches)
+                {
+                    currentNumberOfMatches = temp;
+                }
             }
 
-            catch (ArgumentException)
+            catch (ArgumentException ex)
             {
+                ErrorLogging(ex);
             }
-            catch (IndexOutOfRangeException)
+            catch (IndexOutOfRangeException ex)
             {
+                ErrorLogging(ex);
             }
-            catch (ObjectDisposedException)
+            catch (ObjectDisposedException ex)
             {
+                ErrorLogging(ex);
             }
         }
 }
