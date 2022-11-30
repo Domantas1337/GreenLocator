@@ -128,16 +128,24 @@ namespace GLTests
         }
 
         [Theory]
-        [InlineData("Vilnius", "didlaukio", 47, 2, 1)]
         [InlineData("Vilnius", "didlaukio", 47, 1, 1)]
         [InlineData("Vilnius", "didlaukio", 47, 1, 0)]
         [InlineData("Vilnius", "didlaukio", 47, 0, 1)]
         [InlineData("Vilnius", "didlaukio", 47, 0, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 2, 1)]
         [InlineData("Vilnius", "didlaukio", 48, 2, 2)]
         [InlineData("Vilnius", "didlaukijo", 47, 2, 2)]
         public void CheckNumOfMatchedPeople0(string? City, string? Street, int? House, int? shareStatus, int? thingToShare)
         {
-            GreenLocatorDBContext context = new GreenLocatorDBContext();
+            var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
+            optionsbuilder.UseInMemoryDatabase(databaseName: "GreenLocatorDB");
+            var context = new GreenLocatorDBContext(optionsbuilder.Options);
+
+            var user1 = new AspNetUser { Id = "1", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 1, ThingToShare = 2 };
+            var user2 = new AspNetUser { Id = "2", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 2, ThingToShare = 2 };
+            context.Add(user1);
+            context.Add(user2);
+            context.SaveChanges();
 
             var user = new AspNetUser
             {
@@ -153,13 +161,25 @@ namespace GLTests
             MainModel.NumOfMatchedPeople(args);
 
             Assert.Equal(0, MainModel.currentNumberOfMatches);
+
+            context.Remove(user1);
+            context.Remove(user2);
+            context.SaveChanges();   
         }
 
         [Theory]
         [InlineData("Vilnius", "didlaukio", 47, 2, 2)]
         public void CheckNumOfMatchedPeople1(string? City, string? Street, int? House, int? shareStatus, int? thingToShare)
         {
-            GreenLocatorDBContext context = new GreenLocatorDBContext();
+            var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
+            optionsbuilder.UseInMemoryDatabase(databaseName: "GreenLocatorDB");
+            var context = new GreenLocatorDBContext(optionsbuilder.Options);
+
+            var user1 = new AspNetUser { Id = "1", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 1, ThingToShare = 2 };
+            var user2 = new AspNetUser { Id = "2", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 2, ThingToShare = 2 };
+            context.Add(user1);
+            context.Add(user2);
+            context.SaveChanges();
 
             var user = new AspNetUser
             {
@@ -175,6 +195,10 @@ namespace GLTests
             MainModel.NumOfMatchedPeople(args);
 
             Assert.Equal(1, MainModel.currentNumberOfMatches);
+
+            context.Remove(user1);
+            context.Remove(user2);
+            context.SaveChanges();
         }
     }
 }
