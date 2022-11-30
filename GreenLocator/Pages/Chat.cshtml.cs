@@ -27,7 +27,7 @@ namespace GreenLocator.Pages
                 
                 Options = _context.AspNetUsers.Where(usr => usr.City == current.City && usr.Street == current.Street
                                 && usr.House == current.House && usr.ThingToShare == current.ThingToShare
-                                && usr.ShareStatus != current.ShareStatus).
+                                && usr.ShareStatus != current.ShareStatus && current.Id != usr.Id).
                            Select(x => new SelectListItem
                            {
                                Value = x.UserName,

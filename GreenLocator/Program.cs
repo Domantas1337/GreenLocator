@@ -18,8 +18,19 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Default Password settings.
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 3;
+    options.Password.RequiredUniqueChars = 1;
+});
+
 // Dependency injection:
-builder.Services.AddScoped<GreenLocatorDBContext>();
+builder.Services.AddSingleton<GreenLocatorDBContext>();
 builder.Services.AddScoped<AspNetUser>();
 builder.Services.AddScoped<MainModel>();
 
@@ -55,3 +66,5 @@ app.UseEndpoints(endpoints =>
 });
 
 app.Run();
+
+public partial class Program { }
