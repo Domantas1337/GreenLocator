@@ -24,7 +24,7 @@ namespace GLTests
         [Theory]
         [InlineData("/")]
         [InlineData("/Index")]
-        [InlineData("/Privacy")]
+        [InlineData("/Info")]
         [InlineData("/ChatIndex")]
         [InlineData("/Error")]
         [InlineData("/Identity/Account/Login")]
@@ -41,5 +41,7 @@ namespace GLTests
             Assert.Equal("text/html; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
         }
+
+
     }
 }

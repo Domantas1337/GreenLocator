@@ -9,6 +9,7 @@ using GreenLocator.Pages;
 using NuGet.Frameworks;
 using System.Net.WebSockets;
 using System.IO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GLTests
 {
@@ -128,16 +129,24 @@ namespace GLTests
         }
 
         [Theory]
-        [InlineData("Vilnius", "didlaukio", 47, 2, 1)]
         [InlineData("Vilnius", "didlaukio", 47, 1, 1)]
         [InlineData("Vilnius", "didlaukio", 47, 1, 0)]
         [InlineData("Vilnius", "didlaukio", 47, 0, 1)]
         [InlineData("Vilnius", "didlaukio", 47, 0, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 2, 1)]
         [InlineData("Vilnius", "didlaukio", 48, 2, 2)]
         [InlineData("Vilnius", "didlaukijo", 47, 2, 2)]
         public void CheckNumOfMatchedPeople0(string? City, string? Street, int? House, int? shareStatus, int? thingToShare)
         {
-            GreenLocatorDBContext context = new GreenLocatorDBContext();
+            var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
+            optionsbuilder.UseInMemoryDatabase(databaseName: "GreenLocatorDB");
+            var context = new GreenLocatorDBContext(optionsbuilder.Options);
+
+            var user1 = new AspNetUser { Id = "1", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 1, ThingToShare = 2 };
+            var user2 = new AspNetUser { Id = "2", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 2, ThingToShare = 2 };
+            context.Add(user1);
+            context.Add(user2);
+            context.SaveChanges();
 
             var user = new AspNetUser
             {
@@ -152,14 +161,26 @@ namespace GLTests
 
             MainModel.NumOfMatchedPeople(args);
 
-            Assert.Equal(0, MainModel.currentNumberOfMatches);
+            context.Remove(user1);
+            context.Remove(user2);
+            context.SaveChanges();
+
+            Assert.Equal(0, MainModel.currentNumberOfMatches); 
         }
 
         [Theory]
         [InlineData("Vilnius", "didlaukio", 47, 2, 2)]
         public void CheckNumOfMatchedPeople1(string? City, string? Street, int? House, int? shareStatus, int? thingToShare)
         {
-            GreenLocatorDBContext context = new GreenLocatorDBContext();
+            var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
+            optionsbuilder.UseInMemoryDatabase(databaseName: "GreenLocatorDB");
+            var context = new GreenLocatorDBContext(optionsbuilder.Options);
+
+            var user1 = new AspNetUser { Id = "1qwertyuiop", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 1, ThingToShare = 2 };
+            var user2 = new AspNetUser { Id = "2asdfghjkl", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 2, ThingToShare = 2 };
+            context.Add(user1);
+            context.Add(user2);
+            context.SaveChanges();
 
             var user = new AspNetUser
             {
@@ -174,7 +195,44 @@ namespace GLTests
 
             MainModel.NumOfMatchedPeople(args);
 
+            context.Remove(user1);
+            context.Remove(user2);
+            context.SaveChanges();
+
             Assert.Equal(1, MainModel.currentNumberOfMatches);
+
         }
+
+        /*[Fact]
+        public void EnterInfo_redirects_ViewName()
+        {
+            var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
+            optionsbuilder.UseInMemoryDatabase(databaseName: "GreenLocatorDB");
+
+            using (GreenLocatorDBContext ctx = new(optionsbuilder.Options))
+            {
+                AspNetUser user1 = new AspNetUser { Id = "1", City = null, Street = null, House = null };
+                ctx.Add(user1);
+                //System.Security.Claims.ClaimsIdentity();
+                ctx.SaveChanges();
+
+                var enterInfoProperties = new EnterInfoViewModel
+                {
+                    CityInput = "Vilnius",
+                    StreetInput = "Didlaukio",
+                    HouseInput = 47
+                };
+
+                var sut = new EnterInfoModel(ctx);
+                var result = sut.OnPost() as ViewResult;
+
+                //Assert.Null(result);
+
+                var viewname = result.ViewName;
+
+                Assert.Equal("Main", viewname);
+
+            }
+        }*/
     }
 }
