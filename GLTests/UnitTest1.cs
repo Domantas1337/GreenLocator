@@ -9,6 +9,7 @@ using GreenLocator.Pages;
 using NuGet.Frameworks;
 using System.Net.WebSockets;
 using System.IO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GLTests
 {
@@ -160,11 +161,11 @@ namespace GLTests
 
             MainModel.NumOfMatchedPeople(args);
 
-            Assert.Equal(0, MainModel.currentNumberOfMatches);
-
             context.Remove(user1);
             context.Remove(user2);
-            context.SaveChanges();   
+            context.SaveChanges();
+
+            Assert.Equal(0, MainModel.currentNumberOfMatches); 
         }
 
         [Theory]
@@ -175,8 +176,8 @@ namespace GLTests
             optionsbuilder.UseInMemoryDatabase(databaseName: "GreenLocatorDB");
             var context = new GreenLocatorDBContext(optionsbuilder.Options);
 
-            var user1 = new AspNetUser { Id = "1", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 1, ThingToShare = 2 };
-            var user2 = new AspNetUser { Id = "2", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 2, ThingToShare = 2 };
+            var user1 = new AspNetUser { Id = "1qwertyuiop", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 1, ThingToShare = 2 };
+            var user2 = new AspNetUser { Id = "2asdfghjkl", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 2, ThingToShare = 2 };
             context.Add(user1);
             context.Add(user2);
             context.SaveChanges();
@@ -194,11 +195,44 @@ namespace GLTests
 
             MainModel.NumOfMatchedPeople(args);
 
-            Assert.Equal(1, MainModel.currentNumberOfMatches);
-
             context.Remove(user1);
             context.Remove(user2);
             context.SaveChanges();
+
+            Assert.Equal(1, MainModel.currentNumberOfMatches);
+
         }
+
+        /*[Fact]
+        public void EnterInfo_redirects_ViewName()
+        {
+            var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
+            optionsbuilder.UseInMemoryDatabase(databaseName: "GreenLocatorDB");
+
+            using (GreenLocatorDBContext ctx = new(optionsbuilder.Options))
+            {
+                AspNetUser user1 = new AspNetUser { Id = "1", City = null, Street = null, House = null };
+                ctx.Add(user1);
+                //System.Security.Claims.ClaimsIdentity();
+                ctx.SaveChanges();
+
+                var enterInfoProperties = new EnterInfoViewModel
+                {
+                    CityInput = "Vilnius",
+                    StreetInput = "Didlaukio",
+                    HouseInput = 47
+                };
+
+                var sut = new EnterInfoModel(ctx);
+                var result = sut.OnPost() as ViewResult;
+
+                //Assert.Null(result);
+
+                var viewname = result.ViewName;
+
+                Assert.Equal("Main", viewname);
+
+            }
+        }*/
     }
 }

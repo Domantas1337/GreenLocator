@@ -32,4 +32,8 @@
     <ProjectReference Include="..\GreenLocator\GreenLocator.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestResults\" />
+  </ItemGroup>
+
 </Project>
