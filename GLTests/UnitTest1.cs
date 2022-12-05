@@ -32,8 +32,9 @@ namespace GLTests
         }
 
         [Theory]
-        [InlineData(null, null, null)]
-        public void checkCheckIfCurrentUserArgsNull(string? City, string? Street, int? House)
+        [InlineData(null, null, null, true)]
+        [InlineData("Vilnius", "Didlaukio", 47, false)]
+        public void checkCheckIfCurrentUserArgsNull(string? City, string? Street, int? House, bool IsNull)
         {
             var user = new AspNetUser
             {
@@ -44,7 +45,7 @@ namespace GLTests
 
             var MainModel = new MainModel(null!);
 
-            Assert.True(MainModel.checkIfCurrentUserArgsNull(user));
+            Assert.Equal(IsNull, MainModel.checkIfCurrentUserArgsNull(user));
         }
 
         [Theory]
@@ -114,7 +115,7 @@ namespace GLTests
         [InlineData("Ukmerge", "Vytauto", 69)]
         [InlineData("Ukmerge", "Kauno", 55)]
         [InlineData("Naujoji Akmene", "J. Dalinkeviciaus", 37)]
-        public void checkInputValidation(string City, string Street, int House)
+        public void checkIfInputValidationTrue(string City, string Street, int House)
         {
             var user = new AspNetUser
             {
@@ -129,14 +130,36 @@ namespace GLTests
         }
 
         [Theory]
-        [InlineData("Vilnius", "didlaukio", 47, 1, 1)]
-        [InlineData("Vilnius", "didlaukio", 47, 1, 0)]
-        [InlineData("Vilnius", "didlaukio", 47, 0, 1)]
-        [InlineData("Vilnius", "didlaukio", 47, 0, 0)]
-        [InlineData("Vilnius", "didlaukio", 47, 2, 1)]
-        [InlineData("Vilnius", "didlaukio", 48, 2, 2)]
-        [InlineData("Vilnius", "didlaukijo", 47, 2, 2)]
-        public void CheckNumOfMatchedPeople0(string? City, string? Street, int? House, int? shareStatus, int? thingToShare)
+        [InlineData("", "Jeruzales", 4)]
+        [InlineData("Vilnius", "", 15)]
+        [InlineData("Vilnius", "Da", 56)]
+        [InlineData("Vi", "Didlaukio", 25)]
+        public void checkIfInputValidationFalse(string City, string Street, int? House)
+        {
+            var user = new AspNetUser
+            {
+                City = City,
+                Street = Street,
+                House = House,
+            };
+
+            var enterInfoModel = new EnterInfoModel(null);
+
+            Assert.False(enterInfoModel.InputValidation(user.City, user.Street, (int)user.House));
+        }
+
+        [Theory]
+        [InlineData("Vilnius", "didlaukio", 47, 1, 1, 0, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 1, 0, 0, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 0, 1, 0, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 0, 0, 0, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 2, 1, 0, 0)]
+        [InlineData("Vilnius", "didlaukio", 48, 2, 2, 0, 0)]
+        [InlineData("Vilnius", "didlaukijo", 47, 2, 2, 0, 0)]
+        [InlineData("Vilnius", "didlaukijo", 47, 2, 2, 2, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 2, 2, 0, 1)]
+        public void CheckNumOfMatchedPeople0(string? City, string? Street, int? House, int? shareStatus,
+                                                int? thingToShare, int CurrentMatches, int Matches)
         {
             var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
             optionsbuilder.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
@@ -159,41 +182,51 @@ namespace GLTests
 
             object args = new object[2] { context, user };
 
+            MainModel.currentNumberOfMatches = CurrentMatches;
             MainModel.NumOfMatchedPeople(args);
 
-            Assert.Equal(0, MainModel.currentNumberOfMatches); 
+            Assert.Equal(Matches, MainModel.currentNumberOfMatches); 
         }
 
         [Theory]
-        [InlineData("Vilnius", "didlaukio", 47, 2, 2)]
-        public void CheckNumOfMatchedPeople1(string? City, string? Street, int? House, int? shareStatus, int? thingToShare)
+        [InlineData("Vilnius", "Didlaukio", 47, "Vilnius", "Didlaukio", 47, "Main")]
+        [InlineData("", "", 47, (null), (null), (null), "EnterInfo")]
+        public void CheckEnterInfoGetInputAndRedirect(string CityInput, string StreetInput,
+                    int HouseInput, string ExpCity, string ExpStreet, int? ExpHouse, string PageName)
         {
             var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
             optionsbuilder.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
-            var context = new GreenLocatorDBContext(optionsbuilder.Options);
 
-            var user1 = new AspNetUser { Id = "1qwertyuiop", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 1, ThingToShare = 2 };
-            var user2 = new AspNetUser { Id = "2asdfghjkl", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 2, ThingToShare = 2 };
-            context.Add(user1);
-            context.Add(user2);
-            context.SaveChanges();
-
-            var user = new AspNetUser
+            GreenLocatorDBContext ctx = new(optionsbuilder.Options);
+            AspNetUser user = new AspNetUser
             {
-                City = City,
-                Street = Street,
-                House = House,
-                ShareStatus = shareStatus,
-                ThingToShare = thingToShare
+                Id = "1",
+                City = null,
+                Street = null,
+                House = null
+            };
+            ctx.Add(user);
+            ctx.SaveChanges();
+
+            var enterInfoProperties = new EnterInfoViewModel
+            {
+                CityInput = CityInput,
+                StreetInput = StreetInput,
+                HouseInput = HouseInput
             };
 
-            object args = new object[2] { context, user };
+            var sut = new EnterInfoModel(ctx);
+            sut.EnterInfoViewModel = enterInfoProperties;
+            var result = sut.GetInputAndRedirect(user);
 
-            MainModel.NumOfMatchedPeople(args);
+            Assert.IsType<RedirectToPageResult>(result);
 
-            Assert.Equal(1, MainModel.currentNumberOfMatches);
+            var redirect = result as RedirectToPageResult;
+            Assert.Equal(PageName, redirect!.PageName);
 
+            Assert.Equal(ExpCity, user.City);
+            Assert.Equal(ExpStreet, user.Street);
+            Assert.Equal(ExpHouse, user.House);
         }
-
     }
 }
