@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using GreenLocator.Hubs;
 using GreenLocator.Models;
 using GreenLocator.Pages;
+using GreenLocator;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddSingleton<GreenLocatorDBContext>();
 builder.Services.AddScoped<AspNetUser>();
 builder.Services.AddScoped<MainModel>();
+builder.Services.AddScoped<WebServiceController>();
 
 
 var app = builder.Build();

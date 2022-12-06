@@ -44,3 +44,35 @@ else
 <button onclick="location.href='https://localhost:7150/EnterInfo'" type="button">
     Change Adress
 </button>
+
+<br />
+
+<div class="mb-3">
+        <label class="form-label">Prices of Electricity in EU (MWH)</label>
+        <input id="Prices" class="form-control" type="text" placeholder="price" value="" />
+        <span class="text-danger"></span>
+    </div>
+
+<p>
+    <script type="text/javascript">
+        $function(){
+            var loadPrices = function(){
+                $('#price-list').empty();
+                $.get('/api/WebService').done(function (prices){
+                    $.each(prices, function (i, price) {
+                        var item = `<li>
+                                            <span class="entry">
+                                                <strong>${price.Country} ${price.Price}</strong>
+                                                </span>
+                                            </li>`;
+                        $('#price-list').append(item);
+                    });
+                });
+            }
+
+            loadPrices();
+        }
+    </script>
+</p>
+
+
