@@ -235,28 +235,51 @@ namespace GLTests
         public void CheckMainInitializeStatus(string CityInput, string StreetInput, int HouseInput,
             int? ShareStatusInput, int? ThingToShareInput, 
                     string ExpCity, string ExpStreet, int? ExpHouse,
-                    int ExpShareStatus, int ExpThingToShare, string PageName
-            )
+                    int ExpShareStatus, int ExpThingToShare, string PageName)
         {
             var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
             optionsbuilder.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
 
             GreenLocatorDBContext ctx = new(optionsbuilder.Options);
+        
             AspNetUser user = new AspNetUser
             {
                 Id = "1",
                 City = null,
                 Street = null,
-                House = null
+                House = null,
+                ThingToShare = null,
+                ShareStatus = null
             };
             ctx.Add(user);
             ctx.SaveChanges();
 
-            /*var result = sut.InitializeStatus(user);
+            /*var enterInfoProperties = new EnterInfoViewModel
+            {
+                CityInput = CityInput,
+                StreetInput = StreetInput,
+                HouseInput = HouseInput
+            };
 
-            Assert.IsType<RedirectToPageResult>(result);
+            var sut1 = new EnterInfoModel(ctx);
+            sut1.EnterInfoViewModel = enterInfoProperties;
+            var result1 = sut1.GetInputAndRedirect(user);
 
-            var redirect = result as RedirectToPageResult;*/
+            Assert.IsType<RedirectToPageResult>(result1);
+
+            var redirect1 = result1 as RedirectToPageResult;
+            Assert.Equal(PageName, redirect1!.PageName);
+
+            Assert.Equal(ExpCity, user.City);
+            Assert.Equal(ExpStreet, user.Street);
+            Assert.Equal(ExpHouse, user.House);*/
+
+            var sut2 = new MainModel(ctx);
+
+            var result2 = sut2.InitializeStatus(user);
+
+            var redirect2 = result2 as RedirectToPageResult;
+            Assert.IsType<RedirectToPageResult>(result2);
         }
 
         [Theory]
