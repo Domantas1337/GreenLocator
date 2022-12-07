@@ -30,10 +30,10 @@ public class MainModel : PageModel
         
         AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
-        return GetInputAndInitializeStatus(current);
+        return InitializeStatus(current);
     }
 
-    public IActionResult GetInputAndInitializeStatus(AspNetUser current)
+    public IActionResult InitializeStatus(AspNetUser current)
     {
         try
         {
@@ -85,11 +85,6 @@ public class MainModel : PageModel
     {
         try
         {
-            if (User.Identity == null)
-            {
-                return RedirectToPage("Error");
-            }
-
             ActionInput = Request.Form["ActionInput"];
             ApplianceInput = Request.Form["ApplianceInput"];
 

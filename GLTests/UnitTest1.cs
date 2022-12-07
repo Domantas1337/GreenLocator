@@ -230,6 +230,36 @@ namespace GLTests
         }
 
         [Theory]
+        [InlineData("Vilnius", "Didlaukio", 47, null, null, "Vilnius", "Didlaukio", 47, 0, 0, "Main")]
+        [InlineData("Vilnius", "Didlaukio", 47, 1, 2, "Vilnius", "Didlaukio", 47, 1, 2, "Main")]
+        public void CheckMainInitializeStatus(string CityInput, string StreetInput, int HouseInput,
+            int? ShareStatusInput, int? ThingToShareInput, 
+                    string ExpCity, string ExpStreet, int? ExpHouse,
+                    int ExpShareStatus, int ExpThingToShare, string PageName
+            )
+        {
+            var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
+            optionsbuilder.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
+
+            GreenLocatorDBContext ctx = new(optionsbuilder.Options);
+            AspNetUser user = new AspNetUser
+            {
+                Id = "1",
+                City = null,
+                Street = null,
+                House = null
+            };
+            ctx.Add(user);
+            ctx.SaveChanges();
+
+            /*var result = sut.InitializeStatus(user);
+
+            Assert.IsType<RedirectToPageResult>(result);
+
+            var redirect = result as RedirectToPageResult;*/
+        }
+
+        [Theory]
         [InlineData("Vilnius", "didlaukio", 47, 1, 1, 0)]
         [InlineData("Vilnius", "didlaukio", 47, 0, 1, 0)]
         [InlineData("Vilnius", "didlaukio", 47, 0, 0, 0)]
