@@ -230,8 +230,8 @@ namespace GLTests
         }
 
         [Theory]
-        [InlineData("Vilnius", "Didlaukio", 47, null, null, "Vilnius", "Didlaukio", 47, 0, 0, "Main")]
-        [InlineData("Vilnius", "Didlaukio", 47, 1, 2, "Vilnius", "Didlaukio", 47, 1, 2, "Main")]
+        [InlineData("Vilnius", "Didlaukio", 47, null, null, "Vilnius", "Didlaukio", 47, 0, 0, "EnterInfo")]
+        [InlineData("Vilnius", "Didlaukio", 47, 1, 2, "Vilnius", "Didlaukio", 47, 1, 2, "EnterInfo")]
         public void CheckMainInitializeStatus(string CityInput, string StreetInput, int HouseInput,
             int? ShareStatusInput, int? ThingToShareInput, 
                     string ExpCity, string ExpStreet, int? ExpHouse,
@@ -260,8 +260,15 @@ namespace GLTests
 
             var redirect = result as RedirectToPageResult;
             Assert.IsType<RedirectToPageResult>(result);
-            //Assert.Equal(PageName, redirect!.PageName); fails
+            Assert.Equal(PageName, redirect!.PageName); 
         }
+
+        /*[Theory]
+        []
+        public void CheckGetInputAndChangeStatus(int ShareStatus, int ThingToShare)
+        {
+
+        }*/
 
         [Theory]
         [InlineData("Vilnius", "didlaukio", 47, 1, 1, 0)]
