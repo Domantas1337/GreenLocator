@@ -10,6 +10,7 @@ using NuGet.Frameworks;
 using System.Net.WebSockets;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GLTests
 {
@@ -263,12 +264,29 @@ namespace GLTests
             Assert.Equal(PageName, redirect!.PageName); 
         }
 
-        /*[Theory]
-        []
-        public void CheckGetInputAndChangeStatus(int ShareStatus, int ThingToShare)
+        [Theory]
+        [InlineData(1,1,1,1)]
+        public void CheckGetInputAndChangeStatus(int ShareStatusInput, int ThingToShareInput,
+            int ExpShareStatus, int ExpThingToShare)
         {
+            var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
+            optionsbuilder.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
 
-        }*/
+            GreenLocatorDBContext ctx = new(optionsbuilder.Options);
+
+            AspNetUser user = new AspNetUser
+            {
+                ThingToShare = null,
+                ShareStatus = null
+            };
+            ctx.Add(user);
+            ctx.SaveChanges();
+
+            var sut = new MainModel(ctx);
+
+            var result = sut.GetInputAndChangeStatus(user);
+            Assert.IsType<PageResult>(result);
+        }
 
         [Theory]
         [InlineData("Vilnius", "didlaukio", 47, 1, 1, 0)]
