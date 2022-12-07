@@ -24,8 +24,13 @@ namespace GreenLocator.Pages
             else
             {
                 AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
-                
-                Options = _context.AspNetUsers.Where(usr => usr.City == current.City && usr.Street == current.Street
+                generateMatchList(current);
+            }
+        }
+
+        public void generateMatchList(AspNetUser current)
+        {
+            Options = _context.AspNetUsers.Where(usr => usr.City == current.City && usr.Street == current.Street
                                 && usr.House == current.House && usr.ThingToShare == current.ThingToShare
                                 && usr.ShareStatus != current.ShareStatus && current.Id != usr.Id).
                            Select(x => new SelectListItem
@@ -33,7 +38,6 @@ namespace GreenLocator.Pages
                                Value = x.UserName,
                                Text = x.UserName
                            }).ToList();
-            }
         }
     }
 }

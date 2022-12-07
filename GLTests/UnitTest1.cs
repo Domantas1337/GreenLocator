@@ -228,5 +228,47 @@ namespace GLTests
             Assert.Equal(ExpStreet, user.Street);
             Assert.Equal(ExpHouse, user.House);
         }
+
+        [Theory]
+        [InlineData("Vilnius", "didlaukio", 47, 1, 1, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 0, 1, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 0, 0, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 2, 1, 0)]
+        [InlineData("Vilnius", "didlaukio", 48, 2, 2, 0)]
+        [InlineData("Vilnius", "didlaukio", 47, 2, 2, 1)]
+        [InlineData("Vilnius", "didlaukio", 47, 1, 2, 1)]
+        public void CheckMessageToOptions(string? City, string? Street, int? House, int? shareStatus,
+                                                int? thingToShare, int exp)
+        {
+            var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
+            optionsbuilder.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
+            var context = new GreenLocatorDBContext(optionsbuilder.Options);
+
+            var user1 = new AspNetUser { Id = "1", UserName = "user1", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 1, ThingToShare = 2 };
+            var user2 = new AspNetUser { Id = "2", UserName = "user2", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 0, ThingToShare = 0 };
+            var user3 = new AspNetUser { Id = "3", UserName = "user3", City = "Vilnius", Street = "didlaukio", House = 47, ShareStatus = 2, ThingToShare = 2 };
+            context.Add(user1);
+            context.Add(user2);
+            context.Add(user3);
+            context.SaveChanges();
+
+            var user = new AspNetUser
+            {
+                Id = "0",
+                UserName = "user",
+                City = City,
+                Street = Street,
+                House = House,
+                ShareStatus = shareStatus,
+                ThingToShare = thingToShare
+            };
+
+            var sut = new ChatModel(context);
+            sut.generateMatchList(user);
+
+            var list = sut.Options;
+    
+            Assert.Equal(exp, list.Count);
+        }
     }
 }
