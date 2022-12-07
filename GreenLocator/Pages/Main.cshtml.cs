@@ -22,16 +22,21 @@ public class MainModel : PageModel
     public string? ApplianceInput;
 
     public IActionResult OnGet()
+    {       
+        if (User.Identity == null)
+        {
+            return RedirectToPage("Error");
+        }
+        
+        AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+
+        return GetInputAndInitializeStatus(current);
+    }
+
+    public IActionResult GetInputAndInitializeStatus(AspNetUser current)
     {
         try
         {
-            if (User.Identity == null)
-            {
-                return RedirectToPage("Error");
-            }
-
-            AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
-
             if (checkIfCurrentUserArgsNull(current) == true)
             {
                 throw new ArgumentNullException();
@@ -66,14 +71,24 @@ public class MainModel : PageModel
 
     public IActionResult OnPost()
     {
+        if (User.Identity == null)
+        {
+            return RedirectToPage("Error");
+        }
+
+        AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+
+        return GetInputAndChangeStatus(current);
+    }
+
+    public IActionResult GetInputAndChangeStatus(AspNetUser current)
+    {
         try
         {
             if (User.Identity == null)
             {
                 return RedirectToPage("Error");
             }
-
-            AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
 
             ActionInput = Request.Form["ActionInput"];
             ApplianceInput = Request.Form["ApplianceInput"];
