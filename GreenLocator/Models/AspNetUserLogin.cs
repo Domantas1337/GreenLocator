@@ -1,5 +1,7 @@
-﻿namespace GreenLocator.Models
+﻿using System.Diagnostics.CodeAnalysis;
+namespace GreenLocator.Models
 {
+    [ExcludeFromCodeCoverage]
     public partial class AspNetUserLogin
     {
         public string LoginProvider { get; set; } = null!;
