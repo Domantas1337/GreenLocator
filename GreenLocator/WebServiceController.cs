@@ -1,43 +1,37 @@
 ﻿using System;
-using System.Web.Http;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+using System.Net.Http;
+
+// to get the data add this string to url: "/api/WebService"
 
 namespace GreenLocator;
 
-// to get the data add this string to url: "/api/WebService/GetAll"
-
-//[System.Web.Http.Route("api/[controller]")]
-public class WebServiceController : ApiController
+[Route("api/[controller]")]
+[ApiController]
+public class WebServiceController : Controller
 {
-    readonly ElPrice[] prices = new ElPrice[]
+    /*public IActionResult Index()
     {
-        new ElPrice { Country = "Belgium", Price = 403.65 },
-        new ElPrice { Country = "Bulgaria", Price = 396.35},
-        new ElPrice { Country = "Austria", Price = 400 },
-        new ElPrice { Country = "Lithuania", Price = 384.40}
-    };
+        var prices = GetAll();
+        return View(prices);
+    }*/
 
-    public IEnumerable<ElPrice> GetAllPrices()
+    [HttpGet]
+    public ActionResult<IEnumerable<ElectricityPrice>> GetAll()
     {
-        return prices;
-    }
-
-    public IHttpActionResult GetPrice(String country)
-    {
-        var price = prices.FirstOrDefault((p) => p.Country == country);
-        if (price == null)
+        return new[]
         {
-            return NotFound();
-        }
-        return Ok(price);
+            new ElectricityPrice { Country = "Austria", Price = 400 },
+            new ElectricityPrice { Country = "Belgium", Price = 403.65 },
+            new ElectricityPrice { Country = "Bulgaria", Price = 396.35},
+            new ElectricityPrice { Country = "Lithuania", Price = 384.40}
+        };
     }
 }
 
-public class ElPrice
+public class ElectricityPrice
 {
     public string? Country { get; set; }
     public double Price { get; set; }

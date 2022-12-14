@@ -7,6 +7,24 @@
 
 <h2>The List of current prices in EU:</h2>
 
+<script type="text/javascript">
+    $function(){
+        var loadPrices = function () {
+            $('#price-list').empty();
+            $.get('/api/WebService').done(function (prices) {
+                $.each(prices, function (i, price) {
+                    var item = `<li>
+                                                <span class="entry">
+                                                    <strong>${price.Country} ${price.Price}</strong>
+                                                    </span>
+                                                </li>`;
+                    $('#price-list').append(item);
+                });
+            });
+        }
+        loadPrices();
+    }
+</script>
 
 <table class="table">
     <tr>

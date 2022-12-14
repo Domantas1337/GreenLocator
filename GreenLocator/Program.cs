@@ -7,6 +7,7 @@ using GreenLocator.Pages;
 using GreenLocator;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,10 @@ builder.Services.AddSingleton<GreenLocatorDBContext>();
 builder.Services.AddScoped<AspNetUser>();
 builder.Services.AddScoped<MainModel>();
 builder.Services.AddScoped<WebServiceController>();
+
+
+builder.Services.AddMvc();
+builder.Services.AddMemoryCache();
 
 
 var app = builder.Build();
