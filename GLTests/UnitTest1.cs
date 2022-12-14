@@ -189,10 +189,13 @@ namespace GLTests
         }
 
         [Theory]
-        [InlineData("Vilnius", "Didlaukio", 47, "Vilnius", "Didlaukio", 47, "Main")]
-        [InlineData("", "", 47, (null), (null), (null), "EnterInfo")]
-        public void CheckEnterInfoGetInputAndRedirect(string CityInput, string StreetInput,
-                    int HouseInput, string ExpCity, string ExpStreet, int? ExpHouse, string PageName)
+        [InlineData("Vilnius", "Didlaukio", 47, "Main")]
+        [InlineData("", "", 47, "EnterInfo")]
+        [InlineData("Vilnius", "", 47, "EnterInfo")]
+        [InlineData("", "Didlaukio", 47, "EnterInfo")]
+        [InlineData("Naujoji Akmene", "J. Dalinkeviciaus", 37, "Main")]
+        public void CheckEnterInfoRedirection(string CityInput, string StreetInput,
+                    int HouseInput, string PageName)
         {
             var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
             optionsbuilder.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
@@ -223,11 +226,68 @@ namespace GLTests
 
             var redirect = result as RedirectToPageResult;
             Assert.Equal(PageName, redirect!.PageName);
-
-            Assert.Equal(ExpCity, user.City);
-            Assert.Equal(ExpStreet, user.Street);
-            Assert.Equal(ExpHouse, user.House);
         }
+
+        [Theory]
+        [InlineData("Vilnius", "Didlaukio", 47, "Vilnius", "Didlaukio", 47)]
+        [InlineData("", "", 47, (null), (null), (null))]
+        [InlineData("", "J. Dalinkeviciaus", 37, (null), (null), (null))]
+        [InlineData("Naujoji Akmene", "J. Dalinkeviciaus", 37, "Naujoji Akmene", "J. Dalinkeviciaus", 37)]
+        public void CheckEnterInfoGetInput(string CityInput, string StreetInput,
+                    int HouseInput, string ExpCity, string ExpStreet, int? ExpHouse)
+        {
+            var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
+            optionsbuilder.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
+
+            GreenLocatorDBContext ctx = new(optionsbuilder.Options);
+            AspNetUser user = new AspNetUser
+            {
+                Id = "1",
+                City = null,
+                Street = null,
+                House = null
+            };
+            AspNetUser user1 = new AspNetUser
+            {
+                Id = "2",
+                City = null,
+                Street = null,
+                House = null
+            };
+            ctx.Add(user);
+            ctx.Add(user1);
+            ctx.SaveChanges();
+
+            var enterInfoProperties = new EnterInfoViewModel
+            {
+                CityInput = CityInput,
+                StreetInput = StreetInput,
+                HouseInput = HouseInput
+            };
+
+            AspNetUser[] userInfo = ctx.AspNetUsers.ToArray();
+
+            Assert.Null(userInfo[0].City);
+            Assert.Null(userInfo[0].Street);
+            Assert.Null(userInfo[0].House);
+
+            Assert.Null(userInfo[1].City);
+            Assert.Null(userInfo[1].Street);
+            Assert.Null(userInfo[1].House);
+
+            var sut = new EnterInfoModel(ctx);
+            sut.EnterInfoViewModel = enterInfoProperties;
+            sut.GetInputAndRedirect(user);
+
+            Assert.Equal(ExpCity, userInfo[0].City);
+            Assert.Equal(ExpStreet, userInfo[0].Street);
+            Assert.Equal(ExpHouse, userInfo[0].House);
+
+            Assert.Null(userInfo[1].City);
+            Assert.Null(userInfo[1].Street);
+            Assert.Null(userInfo[1].House);
+        }
+
 
         [Theory]
         [InlineData("Vilnius", "Didlaukio", 47, null, null, "Vilnius", "Didlaukio", 47, 0, 0, "EnterInfo")]
