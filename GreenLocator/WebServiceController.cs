@@ -12,12 +12,6 @@ namespace GreenLocator;
 [ApiController]
 public class WebServiceController : Controller
 {
-    /*public IActionResult Index()
-    {
-        var prices = GetAll();
-        return View(prices);
-    }*/
-
     [HttpGet]
     public ActionResult<IEnumerable<ElectricityPrice>> GetAll()
     {

@@ -7,33 +7,28 @@
 
 <h2>The List of current prices in EU:</h2>
 
+<script src="//code.jquery.com/jquery.min.js" type="text/javascript"></script>
+
 <script type="text/javascript">
-    $function(){
+    $(function(){
         var loadPrices = function () {
             $('#price-list').empty();
             $.get('/api/WebService').done(function (prices) {
                 $.each(prices, function (i, price) {
                     var item = `<li>
                                                 <span class="entry">
-                                                    <strong>${price.Country} ${price.Price}</strong>
+                                                    <strong>${price.country} ${price.price}</strong>
                                                     </span>
                                                 </li>`;
                     $('#price-list').append(item);
                 });
             });
         }
+
         loadPrices();
-    }
+    });
 </script>
 
-<table class="table">
-    <tr>
-        <th>Country</th>
-        <th>Price</th>
+<div id="price-list"></div>
 
-    </tr>
-
-
-
-</table>
 
