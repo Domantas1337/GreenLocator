@@ -1,0 +1,28 @@
+﻿@page
+@using GreenLocator.Pages
+@model IEnumerable<GreenLocator.WebServiceController>
+@{
+    ViewData["Title"] = "ElectricityPrices";
+}
+
+<h2>The List of current prices in EU:</h2>
+
+
+<table class="table">
+    <tr>
+        <th>Country</th>
+        <th>Price</th>
+
+    </tr>
+
+    @foreach (var price in Model)
+    {
+        <tr>
+            <td>
+                @price.GetAll().Result
+            </td>
+        </tr>
+    }
+
+</table>
+

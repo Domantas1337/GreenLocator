@@ -5,6 +5,8 @@ using GreenLocator.Hubs;
 using GreenLocator.Models;
 using GreenLocator.Pages;
 using GreenLocator;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +62,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers(); // Map attribute-routed API controllers
+    //endpoints.MapDefaultControllerRoute(); // Map conventional MVC controllers using the default route
+    endpoints.MapRazorPages();//map razor pages
+});
 
 app.UseEndpoints(endpoints =>
 {
