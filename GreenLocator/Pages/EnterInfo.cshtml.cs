@@ -18,41 +18,43 @@ public class EnterInfoModel : PageModel
 
     public IActionResult OnPost()
     {
+        if (User.Identity == null)
+        {
+            throw new FormatException();
+        }
+
+        AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+
+        return GetInputAndRedirect(current);
+    }
+
+    public IActionResult GetInputAndRedirect(AspNetUser current)
+    {
         if (!ModelState.IsValid)
         {
             return Page();
         }
         try
         {
+            if (!InputValidation(city: EnterInfoViewModel.CityInput,
+                                street: EnterInfoViewModel.StreetInput,
+                                house: EnterInfoViewModel.HouseInput))
             {
-                if (User.Identity == null)
-                {
-                    throw new FormatException();
-                }
-
-                AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
-
-                if(!InputValidation(city:EnterInfoViewModel.CityInput,
-                                    street:EnterInfoViewModel.StreetInput,
-                                    house:EnterInfoViewModel.HouseInput))
-                {
-                    throw new FormatException();
-                }
-
-                current.City = EnterInfoViewModel.CityInput ?? throw new ArgumentNullException();
-                current.Street = EnterInfoViewModel.StreetInput ?? throw new ArgumentNullException();
-                current.House = EnterInfoViewModel.HouseInput;
-
-                if(Delegates.CheckUserInfo(Extensions.CheckIfUsrFieldsNull, current))
-                {
-                    throw new ArgumentNullException();
-                }
-
-                _context.SaveChanges();
-
-                return RedirectToPage("Main");
+                throw new FormatException();
             }
 
+            current.City = EnterInfoViewModel.CityInput ?? throw new ArgumentNullException();
+            current.Street = EnterInfoViewModel.StreetInput ?? throw new ArgumentNullException();
+            current.House = EnterInfoViewModel.HouseInput;
+
+            if (Delegates.CheckUserInfo(Extensions.CheckIfUsrFieldsNull, current))
+            {
+                throw new ArgumentNullException();
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToPage("Main");
         }
 
         catch (FormatException)
@@ -75,9 +77,7 @@ public class EnterInfoModel : PageModel
 
             return RedirectToPage("Error");
         }
-
     }
-
     public bool InputValidation(string city, string street, int house)
     {
         if (CheckString(city) && CheckString(street) && CheckHouse(house))

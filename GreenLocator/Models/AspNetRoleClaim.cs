@@ -1,5 +1,7 @@
-﻿namespace GreenLocator.Models
+﻿using System.Diagnostics.CodeAnalysis;
+namespace GreenLocator.Models
 {
+    [ExcludeFromCodeCoverage]
     public partial class AspNetRoleClaim
     {
         public int Id { get; set; }

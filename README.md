@@ -1,7 +1,8 @@
 # GreenLocator
 
-Projektas - dalinimasis daiktų, kurie reikalauja daug energijos, ir nėra išnaudojami pilnai.
+Share Home appliances which require lots of energy and are not fully utilised
 
-Vartotojas prisiregistruoja, nurodo savo gyvenamąją vietą ir pasirenka kuo norėtų dalintis.
-"Sumachinus" dviems vartotojams, automatiškai atsidaro chatas tarp jų, kur jie gali susitarti.
-Prisiregistravus yra išsaugojami gyvenamosios vietos duomenys ir chatai. Galima dalintis orkaitę ar skalbimo mašiną.
+User registers, enters current home address and chooses what he/she would like to share.
+When two users match, they can communicate through built-in chat window.
+Address and share information are saved in a database.
+Users can share oven or washing machine.

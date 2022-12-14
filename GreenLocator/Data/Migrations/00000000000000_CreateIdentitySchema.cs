@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GreenLocator.Data.Migrations
 {
+    [ExcludeFromCodeCoverage]
     public partial class CreateIdentitySchema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
