@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using GreenLocator.Hubs;
 using GreenLocator.Models;
 using GreenLocator.Pages;
+using GreenLocator;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +37,11 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddSingleton<GreenLocatorDBContext>();
 builder.Services.AddScoped<AspNetUser>();
 builder.Services.AddScoped<MainModel>();
+builder.Services.AddScoped<WebServiceController>();
+
+
+builder.Services.AddMvc();
+builder.Services.AddMemoryCache();
 
 
 var app = builder.Build();
@@ -58,6 +67,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers(); // Map attribute-routed API controllers
+    //endpoints.MapDefaultControllerRoute(); // Map conventional MVC controllers using the default route
+    endpoints.MapRazorPages();//map razor pages
+});
 
 app.UseEndpoints(endpoints =>
 {
