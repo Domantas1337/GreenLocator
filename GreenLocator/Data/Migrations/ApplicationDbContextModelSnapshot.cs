@@ -5,10 +5,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GreenLocator.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+    [ExcludeFromCodeCoverage]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
