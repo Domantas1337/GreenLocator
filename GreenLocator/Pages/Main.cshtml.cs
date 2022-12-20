@@ -23,8 +23,6 @@ public class MainModel : PageModel
 
     public IActionResult OnGet()
     {
-        int[] x = new int[2];
-        int y = x[3];
         if (User.Identity == null)
         {
             return RedirectToPage("Error");

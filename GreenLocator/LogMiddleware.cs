@@ -1,6 +1,6 @@
 ﻿using System.Net;
-
 using Newtonsoft.Json;
+using Serilog;
 
 namespace GreenLocator;
 
@@ -27,9 +27,10 @@ public class LogMiddleware
 
     private Task LogException(HttpContext context, Exception ex)
     {
+        Log.Error(ex.ToString());
+
         HttpStatusCode code = HttpStatusCode.InternalServerError;
 
-        if (ex is IndexOutOfRangeException) code = HttpStatusCode.BadRequest;
         string result = JsonConvert.SerializeObject(new { error = ex.Message });
 
         context.Response.ContentType = "application/json";

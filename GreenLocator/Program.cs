@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,6 +83,9 @@ app.UseEndpoints(endpoints =>
 });
 
 app.UseMiddleware<LogMiddleware>();
+
+Log.Logger = new LoggerConfiguration().WriteTo.File("Logs/log.txt")
+                                      .CreateLogger();
 
 app.Run();
 
