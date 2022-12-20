@@ -18,6 +18,27 @@
     {
         return ((borrowedWashingM * WashingMConsumption) + (borrowedOven * OvenConsumption)) / 1000; // returns kWh
     }
+
+    public string? Country;
+    public int? BorrowedOven;
+    public int? BorrowedWashingM;
+
+    /*public IActionResult Refresh(int borrowedWashingM, int borrowedOven, string countr)
+    {
+        return Page();
+    }
+
+    public IActionResult OnPost(int borrowedWashingM, int borrowedOven, string countr)
+    {
+        if (User.Identity == null)
+        {
+            return RedirectToPage("Error");
+        }
+
+            countr = Request.Form["Country"];
+        
+        Refresh(borrowedWashingM, borrowedOven, countr);
+    }*/
 }
 
 <article>
@@ -27,14 +48,27 @@
     <form method="post">
 
         <div class="mb-3">
-            <label class="form-label">Oven hours</label>
+            <label class="form-label">baking hours</label>
             <input type="number" class="form-control" placeholder="0"/>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Washing machine hours</label>
+            <label class="form-label">Washing machine uses</label>
             <input type="number" class="form-control" placeholder="0"/>
         </div>
+
+    <h2>Select country:</h2>
+
+        <select name="Country">
+            <option value="">Select...</option>
+            <option value="Austria">Austria</option>
+            <option value="Belgium">Belgium</option>
+            <option value="Bulgaria">Bulgaria</option>
+            <option value="Lithuania">Lithuania</option>
+        </select>
+
+        <br />
+        <br />
 
         <div>
             <button type="submit" class="btn btn-primary">Confirm</button>
