@@ -21,6 +21,9 @@ public class MainModel : PageModel
     public string? ActionInput;
     public string? ApplianceInput;
 
+    [BindProperty]
+    public MainViewModel MainViewModel { get; set; } = null!;
+
     public IActionResult OnGet()
     {       
         if (User.Identity == null)
@@ -85,10 +88,10 @@ public class MainModel : PageModel
     {
         try
         {
-            ActionInput = Request.Form["ActionInput"];
-            ApplianceInput = Request.Form["ApplianceInput"];
+            ActionInput = MainViewModel.ActionInput;
+            ApplianceInput = MainViewModel.ApplianceInput;
 
-            SetCurrentUser(ActionInput, ApplianceInput);
+            SetCurrentUser(MainViewModel.ActionInput, MainViewModel.ApplianceInput);
             _context.SaveChanges();
 
             ParameterizedThreadStart notifThreadStart = new(NumOfMatchedPeople!);

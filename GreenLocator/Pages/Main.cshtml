@@ -4,22 +4,26 @@
     ViewData["Title"] = "Main window";
 }
 
-<h2>Select if you want to borrow, or share:</h2>
+<h2>Select your preferences:</h2>
 <form method="post">
 
-    <select name="ActionInput">
-        <option value="">Select...</option>
-        <option value="Borrow">Borrow</option>
-        <option value="Offer">Offer</option>
-    </select>
+    <div class="mb-3">
+        <label class="form-label">Action</label>
+        <select id="Action" asp-for="MainViewModel.ActionInput" required>
+            <option value="">Select...</option>
+            <option value="Borrow">Borrow</option>
+            <option value="Offer">Offer</option>
+        </select>
+    </div>
 
-    <h2>Select the type of appliance:</h2>
-
-    <select name="ApplianceInput">
-        <option value="">Select...</option>
-        <option value="Washing machine">Washing machine</option>
-        <option value="Oven">Oven</option>
-    </select>
+    <div class="mb-3">
+        <label class="form-label">Appliance</label>
+        <select id="Appliance" asp-for="MainViewModel.ApplianceInput" required>
+            <option value="">Select...</option>
+            <option value="Washing machine">Washing machine</option>
+            <option value="Oven">Oven</option>
+        </select>
+    </div>
 
     <input type="submit" value="Confirm">
 </form>

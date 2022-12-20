@@ -27,21 +27,20 @@ namespace GLTests
         [InlineData("/Info")]
         [InlineData("/ChatIndex")]
         [InlineData("/Error")]
+        [InlineData("/Prices")]
         [InlineData("/Identity/Account/Login")]
         [InlineData("/Identity/Account/Register")]
         [InlineData("/Identity/Account/Manage")]
-        public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
+        public async Task Get_EndpointsReturnSuccess(string url)
         {          
             var client = _factory.CreateClient();
 
-            
             var response = await client.GetAsync(url);
-           
-            response.EnsureSuccessStatusCode();
-            Assert.Equal("text/html; charset=utf-8",
-                response.Content.Headers.ContentType.ToString());
+
+            Assert.True(response.IsSuccessStatusCode);
+            
         }
 
-
     }
+
 }
