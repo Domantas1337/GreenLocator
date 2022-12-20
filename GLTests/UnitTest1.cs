@@ -323,12 +323,60 @@ namespace GLTests
             Assert.Equal(PageName, redirect!.PageName); 
         }
 
-        /*[Theory]
-        []
-        public void CheckGetInputAndChangeStatus(int ShareStatus, int ThingToShare)
+        [Theory]
+        [InlineData( null, null, 0, 0)]
+        [InlineData( "Borrow", "Oven", 1, 2)]
+        public void CheckGetInputAndChangeStatus(string ActionInput, string ApplianceInput,
+                    int ExpAction, int ExpAppliance)
         {
+            var optionsbuilder = new DbContextOptionsBuilder<GreenLocatorDBContext>();
+            optionsbuilder.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
 
-        }*/
+            GreenLocatorDBContext ctx = new(optionsbuilder.Options);
+            AspNetUser user = new AspNetUser
+            {
+                Id = "1",
+                ThingToShare = null,
+                ShareStatus = null
+            };
+            AspNetUser user1 = new AspNetUser
+            {
+                Id = "2",
+                ThingToShare = null,
+                ShareStatus = null
+            };
+            ctx.Add(user);
+            ctx.Add(user1);
+            ctx.SaveChanges();
+
+            var mainProperties = new MainViewModel
+            {
+                ActionInput = ActionInput,
+                ApplianceInput = ApplianceInput
+            };
+
+            AspNetUser[] userInfo = ctx.AspNetUsers.ToArray();
+
+            Assert.Null(userInfo[0].City);
+            Assert.Null(userInfo[0].Street);
+            Assert.Null(userInfo[0].House);
+
+            Assert.Null(userInfo[1].City);
+            Assert.Null(userInfo[1].Street);
+            Assert.Null(userInfo[1].House);
+
+            var sut = new MainModel(ctx);
+            sut.MainViewModel = mainProperties;
+            sut.GetInputAndChangeStatus(user);
+
+            Assert.Equal(ExpAction, userInfo[0].ShareStatus);
+            Assert.Equal(ExpAppliance, userInfo[0].ThingToShare);
+
+            Assert.Null(userInfo[1].City);
+            Assert.Null(userInfo[1].Street);
+            Assert.Null(userInfo[1].House);
+
+        }
 
         [Theory]
         [InlineData("Vilnius", "didlaukio", 47, 1, 1, 0)]

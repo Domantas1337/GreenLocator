@@ -91,7 +91,7 @@ public class MainModel : PageModel
             ActionInput = MainViewModel.ActionInput;
             ApplianceInput = MainViewModel.ApplianceInput;
 
-            SetCurrentUser(MainViewModel.ActionInput, MainViewModel.ApplianceInput);
+            SetCurrentUser(ActionInput, ApplianceInput);
             _context.SaveChanges();
 
             ParameterizedThreadStart notifThreadStart = new(NumOfMatchedPeople!);
