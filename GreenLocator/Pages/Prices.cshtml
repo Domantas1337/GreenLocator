@@ -3,23 +3,46 @@
 @model GreenLocator.WebServiceController
 @{
     ViewData["Title"] = "ElectricityPrices";
+    string countr = "Lithuania";
+    int borrowedOven = 8; // how many hours was it running
+    int borrowedWashingM = 4; // how many times was it used
+
+    int OvenConsumption = 3500; // power consumtion of an average consumer product in Wats
+    int WashingMConsumption = 3000; // Wh consumed for one wash (2h * 1.5kW)
+
+
+}
+
+@functions{
+    public double TotalConsumption(int borrowedWashingM, int WashingMConsumption, int borrowedOven, int OvenConsumption)
+    {
+        return ((borrowedWashingM * WashingMConsumption) + (borrowedOven * OvenConsumption)) / 1000; // returns kWh
+    }
 }
 
 <h2>The List of current prices in EU:</h2>
 
 <script src="//code.jquery.com/jquery.min.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-    $(function(){
+
+
+<div id="price-list"></div>
+
+<h3>Now you save:</h3>
+<div id="saved-amount"></div>
+<div id="selected-country"></div>
+
+<script>
+    $(function () {
         var loadPrices = function () {
             $('#price-list').empty();
             $.get('/api/WebService').done(function (prices) {
                 $.each(prices, function (i, price) {
                     var item = `<li>
-                                                <span class="entry">
-                                                    <strong>${price.country} ${price.price}</strong>
-                                                    </span>
-                                                </li>`;
+                                                    <span class="entry">
+                                                        <strong>${price.country} ${price.price}</strong>
+                                                        </span>
+                                                    </li>`;
                     $('#price-list').append(item);
                 });
             });
@@ -29,6 +52,39 @@
     });
 </script>
 
-<div id="price-list"></div>
+<script>
+    $(function () {
+        var loadPrice = function () {
+            $('#saved-amount').empty();
+            $.get('/api/WebService/@countr').done(function (country) {
+                var item =
+                    `<span class="entry">
+                        <strong>Now you saved: @TotalConsumption(borrowedWashingM, WashingMConsumption, borrowedOven, OvenConsumption) kWh
+                            = ${country.price/1000 * @TotalConsumption(borrowedWashingM, WashingMConsumption, borrowedOven, OvenConsumption)}
+                            euros</strong>
+                     </span>`;
+                $('#saved-amount').append(item);
+            });
+        }
+
+        loadPrice();
+    });
+</script>
 
 
+<script>
+    $(function () {
+        var loadPrice = function () {
+            $('#selected-country').empty();
+            $.get('/api/WebService/@countr').done(function (countr) {
+                var item =
+                    `<span class="entry">
+                        <strong>Result is based on this data: country: ${countr.country}, Price (MW/h): ${countr.price}</strong>
+                    </span>`;
+                $('#selected-country').append(item);
+            });
+        }
+
+        loadPrice();
+    });
+</script>
