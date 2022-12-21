@@ -8,6 +8,8 @@ using GreenLocator;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +40,6 @@ builder.Services.AddSingleton<GreenLocatorDBContext>();
 builder.Services.AddScoped<AspNetUser>();
 builder.Services.AddScoped<MainModel>();
 builder.Services.AddScoped<WebServiceController>();
-
 
 builder.Services.AddMvc();
 builder.Services.AddMemoryCache();
@@ -80,6 +81,11 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
     endpoints.MapHub<ChatHub>("/chatHub");
 });
+
+app.UseMiddleware<LogMiddleware>();
+
+Log.Logger = new LoggerConfiguration().WriteTo.File("Logs/log.txt")
+                                      .CreateLogger();
 
 app.Run();
 

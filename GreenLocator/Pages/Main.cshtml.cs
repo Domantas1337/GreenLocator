@@ -25,7 +25,7 @@ public class MainModel : PageModel
     public MainViewModel MainViewModel { get; set; } = null!;
 
     public IActionResult OnGet()
-    {       
+    {
         if (User.Identity == null)
         {
             return RedirectToPage("Error");
