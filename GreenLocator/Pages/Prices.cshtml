@@ -3,9 +3,9 @@
 @model GreenLocator.WebServiceController
 @{
     ViewData["Title"] = "ElectricityPrices";
-    /*string countr = "Lithuania";
+    string countr = "Lithuania";
     int borrowedOven = 8; // how many hours was it running
-    int borrowedWashingM = 4; // how many times was it used*/
+    int borrowedWashingM = 4; // how many times was it used
 
     int OvenConsumption = 3500; // power consumtion of an average consumer product in Wats
     int WashingMConsumption = 3000; // Wh consumed for one wash (2h * 1.5kW)
@@ -13,31 +13,11 @@
 
 }
 
-@functions{
-    string countr()
-    {
-        return Request.Form["Country"];
-    }
-    int borrowedOven() // how many hours was it running
-    {
-        string OvenHours = Request.Form["OvenHours"];
-        if (OvenHours == "")
-            return 0;
-        else
-            return Int32.Parse(Request.Form["OvenHours"]);
-    }
-    int borrowedWashingM() // how many times was it used
-    {
-        string WashingTimes = Request.Form["WashingTimes"];
-        if (WashingTimes == "")
-            return 0;
-        else
-            return Int32.Parse(Request.Form["WashingTimes"]);
-    }
+@functions {
 
     public double TotalConsumption(int borrowedWashingM, int WashingMConsumption, int borrowedOven, int OvenConsumption)
     {
-        double Value =  ((borrowedWashingM * WashingMConsumption) + (borrowedOven * OvenConsumption)) / 1000; // returns kWh
+        double Value = ((borrowedWashingM * WashingMConsumption) + (borrowedOven * OvenConsumption)) / 1000; // returns kWh
 
         return Value;
     }
@@ -47,19 +27,19 @@
     public int? BorrowedWashingM;
 
     /*public IActionResult Refresh(int borrowedWashingM, int borrowedOven, string countr)
-    {
+        {
         return Page();
     }
 
     public IActionResult OnPost(int borrowedWashingM, int borrowedOven, string countr)
-    {
-        if (User.Identity == null)
         {
+        if (User.Identity == null)
+            {
             return RedirectToPage("Error");
-        }
+            }
 
             countr = Request.Form["Country"];
-        
+
         Refresh(borrowedWashingM, borrowedOven, countr);
     }*/
 }
@@ -72,17 +52,17 @@
 
         <div class="mb-3">
             <label class="form-label">baking hours</label>
-            <input type="number" class="form-control" name="OvenHours"placeholder="0"/>
+            <input type="number" class="form-control" name="OvenHours" placeholder="0" />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Washing machine uses</label>
-            <input type="number" class="form-control" name="WashingTimes"placeholder="0"/>
+            <input type="number" class="form-control" name="WashingTimes" placeholder="0" />
         </div>
 
-    <h2>Select country:</h2>
+        <h2>Select country:</h2>
 
-        <select name="Country">
+        <select name="CountryInput">
             <option value="">Select...</option>
             <option value="Austria">Austria</option>
             <option value="Belgium">Belgium</option>
@@ -121,10 +101,10 @@
             $.get('/api/WebService').done(function (prices) {
                 $.each(prices, function (i, price) {
                     var item = `<li>
-                                                    <span class="entry">
-                                                        <strong>${price.country} ${price.price}</strong>
-                                                        </span>
-                                                    </li>`;
+                                                        <span class="entry">
+                                                            <strong>${price.country} ${price.price}</strong>
+                                                            </span>
+                                                        </li>`;
                     $('#price-list').append(item);
                 });
             });
@@ -138,13 +118,13 @@
     $(function () {
         var loadPrice = function () {
             $('#saved-amount').empty();
-            $.get('/api/WebService/@countr()').done(function (country) {
+            $.get('/api/WebService/@countr').done(function (country) {
                 var item =
                     `<span class="entry">
-                        <strong>Now you saved: @TotalConsumption(borrowedWashingM(), WashingMConsumption, borrowedOven(), OvenConsumption) kWh
-                            = ${(country.price/1000 * @TotalConsumption(borrowedWashingM(), WashingMConsumption, borrowedOven(), OvenConsumption)).toFixed(2)}
-                            euros</strong>
-                     </span>`;
+                            <strong>Now you saved: @TotalConsumption(borrowedWashingM, WashingMConsumption, borrowedOven, OvenConsumption) kWh
+                                = ${(country.price / 1000 * @TotalConsumption(borrowedWashingM, WashingMConsumption, borrowedOven, OvenConsumption)).toFixed(2)}
+                                euros</strong>
+                         </span>`;
                 $('#saved-amount').append(item);
             });
         }
@@ -158,11 +138,11 @@
     $(function () {
         var loadPrice = function () {
             $('#selected-country').empty();
-            $.get('/api/WebService/@countr()').done(function (countr) {
+            $.get('/api/WebService/@countr').done(function (countr) {
                 var item =
                     `<span class="entry">
-                        <strong>Result is based on this data: country: ${countr.country}, Price (Eur/MWh): ${countr.price}</strong>
-                    </span>`;
+                            <strong>Result is based on this data: country: ${countr.country}, Price (Eur/MWh): ${countr.price}</strong>
+                        </span>`;
                 $('#selected-country').append(item);
             });
         }
