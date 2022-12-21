@@ -39,7 +39,7 @@
     {
         double Value =  ((borrowedWashingM * WashingMConsumption) + (borrowedOven * OvenConsumption)) / 1000; // returns kWh
 
-        return (double)System.Math.Round(Value, 2);
+        return Value;
     }
 
     public string? Country;
@@ -142,7 +142,7 @@
                 var item =
                     `<span class="entry">
                         <strong>Now you saved: @TotalConsumption(borrowedWashingM(), WashingMConsumption, borrowedOven(), OvenConsumption) kWh
-                            = ${country.price/1000 * @TotalConsumption(borrowedWashingM(), WashingMConsumption, borrowedOven(), OvenConsumption)}
+                            = ${(country.price/1000 * @TotalConsumption(borrowedWashingM(), WashingMConsumption, borrowedOven(), OvenConsumption)).toFixed(2)}
                             euros</strong>
                      </span>`;
                 $('#saved-amount').append(item);
