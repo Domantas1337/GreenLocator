@@ -1,4 +1,7 @@
+using GreenLocator.Data;
 using GreenLocator.Models;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.RegularExpressions;
@@ -7,8 +10,8 @@ namespace GreenLocator.Pages;
 
 public class EnterInfoModel : PageModel
 {
-    protected readonly GreenLocatorDBContext _context;
-    public EnterInfoModel(GreenLocatorDBContext context)
+    protected readonly ApplicationDbContext _context;
+    public EnterInfoModel(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -23,9 +26,28 @@ public class EnterInfoModel : PageModel
             throw new FormatException();
         }
 
-        AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+        IdentityUser userFromAuthenticationMiddleware = _context.Users.ToList().First(x => x.UserName == User.Identity.Name);
 
-        return GetInputAndRedirect(current);
+        AspNetUser currentUser = new AspNetUser()
+        {
+            UserName = userFromAuthenticationMiddleware.UserName,
+            Email = userFromAuthenticationMiddleware.Email,
+            NormalizedUserName = userFromAuthenticationMiddleware.NormalizedUserName,
+            EmailConfirmed = userFromAuthenticationMiddleware.EmailConfirmed,
+            SecurityStamp = userFromAuthenticationMiddleware.SecurityStamp,
+            PasswordHash = userFromAuthenticationMiddleware.PasswordHash,
+            ConcurrencyStamp = userFromAuthenticationMiddleware.ConcurrencyStamp,
+            PhoneNumber = userFromAuthenticationMiddleware.PhoneNumber,
+            PhoneNumberConfirmed = userFromAuthenticationMiddleware.PhoneNumberConfirmed,
+            TwoFactorEnabled = userFromAuthenticationMiddleware.TwoFactorEnabled,
+            LockoutEnd = userFromAuthenticationMiddleware.LockoutEnd,
+            LockoutEnabled = userFromAuthenticationMiddleware.LockoutEnabled,
+            AccessFailedCount = userFromAuthenticationMiddleware.AccessFailedCount,
+
+        };
+
+
+        return GetInputAndRedirect(currentUser);
     }
 
     public IActionResult GetInputAndRedirect(AspNetUser current)

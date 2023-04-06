@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\GreenLocator.props" />
+</Project>

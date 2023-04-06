@@ -5,15 +5,32 @@
 
 @model GreenLocator.Pages.EnterInfoModel
 
-@inject GreenLocatorDBContext _context
+@inject ApplicationDbContext _context
 
 @functions {
 
     public string Values(string input)
     {
 
-        AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+        IdentityUser userFromAuthenticationMiddleware = _context.Users.ToList().First(x => x.UserName == User.Identity.Name);
 
+        AspNetUser current = new AspNetUser()
+            {
+                UserName = userFromAuthenticationMiddleware.UserName,
+                Email = userFromAuthenticationMiddleware.Email,
+                NormalizedUserName = userFromAuthenticationMiddleware.NormalizedUserName,
+                EmailConfirmed = userFromAuthenticationMiddleware.EmailConfirmed,
+                SecurityStamp = userFromAuthenticationMiddleware.SecurityStamp,
+                PasswordHash = userFromAuthenticationMiddleware.PasswordHash,
+                ConcurrencyStamp = userFromAuthenticationMiddleware.ConcurrencyStamp,
+                PhoneNumber = userFromAuthenticationMiddleware.PhoneNumber,
+                PhoneNumberConfirmed = userFromAuthenticationMiddleware.PhoneNumberConfirmed,
+                TwoFactorEnabled = userFromAuthenticationMiddleware.TwoFactorEnabled,
+                LockoutEnd = userFromAuthenticationMiddleware.LockoutEnd,
+                LockoutEnabled = userFromAuthenticationMiddleware.LockoutEnabled,
+                AccessFailedCount = userFromAuthenticationMiddleware.AccessFailedCount,
+
+            };
         if (Delegates.CheckUserInfo(Extensions.CheckIfUsrNull, current))
         {
             return "error";

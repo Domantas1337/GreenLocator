@@ -1,6 +1,10 @@
-﻿namespace GreenLocator.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+using Microsoft.AspNetCore.Identity;
+
+namespace GreenLocator.Models
 {
-    public partial class AspNetUser
+    public partial class AspNetUser : IdentityUser
     {
         public AspNetUser()
         {

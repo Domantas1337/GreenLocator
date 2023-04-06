@@ -1,6 +1,8 @@
-using System.Runtime.CompilerServices;
 
+using GreenLocator.Data;
 using GreenLocator.Models;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -9,8 +11,8 @@ namespace GreenLocator.Pages;
 
 public class MainModel : PageModel
 {
-    private readonly GreenLocatorDBContext _context;
-    public MainModel(GreenLocatorDBContext context)
+    private readonly ApplicationDbContext _context;
+    public MainModel(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -31,9 +33,27 @@ public class MainModel : PageModel
             return RedirectToPage("Error");
         }
         
-        AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+        IdentityUser userFromAuthenticationMiddleware = _context.Users.ToList().First(x => x.UserName == User.Identity.Name);
 
-        return InitializeStatus(current);
+        AspNetUser currentUser = new AspNetUser()
+        {
+            UserName = userFromAuthenticationMiddleware.UserName,
+            Email = userFromAuthenticationMiddleware.Email,
+            NormalizedUserName = userFromAuthenticationMiddleware.NormalizedUserName,
+            EmailConfirmed  = userFromAuthenticationMiddleware.EmailConfirmed,
+            SecurityStamp = userFromAuthenticationMiddleware.SecurityStamp,
+            PasswordHash = userFromAuthenticationMiddleware.PasswordHash,
+            ConcurrencyStamp = userFromAuthenticationMiddleware.ConcurrencyStamp,
+            PhoneNumber = userFromAuthenticationMiddleware.PhoneNumber,
+            PhoneNumberConfirmed = userFromAuthenticationMiddleware.PhoneNumberConfirmed,
+            TwoFactorEnabled = userFromAuthenticationMiddleware.TwoFactorEnabled,
+            LockoutEnd = userFromAuthenticationMiddleware.LockoutEnd,
+            LockoutEnabled = userFromAuthenticationMiddleware.LockoutEnabled,
+            AccessFailedCount = userFromAuthenticationMiddleware.AccessFailedCount,
+       
+        };
+
+        return InitializeStatus(currentUser);
     }
 
     public IActionResult InitializeStatus(AspNetUser current)
@@ -79,9 +99,27 @@ public class MainModel : PageModel
             return RedirectToPage("Error");
         }
 
-        AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
+        IdentityUser userFromAuthenticationMiddleware = _context.Users.ToList().First(x => x.UserName == User.Identity.Name);
 
-        return GetInputAndChangeStatus(current);
+        AspNetUser currentUser = new AspNetUser()
+        {
+            UserName = userFromAuthenticationMiddleware.UserName,
+            Email = userFromAuthenticationMiddleware.Email,
+            NormalizedUserName = userFromAuthenticationMiddleware.NormalizedUserName,
+            EmailConfirmed = userFromAuthenticationMiddleware.EmailConfirmed,
+            SecurityStamp = userFromAuthenticationMiddleware.SecurityStamp,
+            PasswordHash = userFromAuthenticationMiddleware.PasswordHash,
+            ConcurrencyStamp = userFromAuthenticationMiddleware.ConcurrencyStamp,
+            PhoneNumber = userFromAuthenticationMiddleware.PhoneNumber,
+            PhoneNumberConfirmed = userFromAuthenticationMiddleware.PhoneNumberConfirmed,
+            TwoFactorEnabled = userFromAuthenticationMiddleware.TwoFactorEnabled,
+            LockoutEnd = userFromAuthenticationMiddleware.LockoutEnd,
+            LockoutEnabled = userFromAuthenticationMiddleware.LockoutEnabled,
+            AccessFailedCount = userFromAuthenticationMiddleware.AccessFailedCount,
+
+        };
+
+        return GetInputAndChangeStatus(currentUser);
     }
 
     public IActionResult GetInputAndChangeStatus(AspNetUser current)
