@@ -24,11 +24,11 @@ namespace GreenLocator.Pages
             else
             {
                 AspNetUser current = _context.AspNetUsers.First(x => x.UserName == User.Identity.Name);
-                generateMatchList(current);
+                GenerateMatchList(current);
             }
         }
 
-        public void generateMatchList(AspNetUser current)
+        public void GenerateMatchList(AspNetUser current)
         {
             Options = _context.AspNetUsers.Where(usr => usr.City == current.City && usr.Street == current.Street
                                 && usr.House == current.House && usr.ThingToShare == current.ThingToShare

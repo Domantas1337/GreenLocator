@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7kxTV8UKNZtoKzsJO6EAjqkTVFMYjrVUJWGlpIft3KeZxiSA5BzY45HFALMBYpzbAvEjBGd8vUd+3LH+98gmag==",
+  "dgSpecHash": "tWNenp8jBaxoH6Vw0ms7/92OTFTZ8ph7wjzQczZzw6XDY0TP60BVzUEfPxEfBKbCxX1RjLu4vkQaTOc/9NXMHw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GreenLocator\\GreenLocator.csproj",
+  "projectFilePath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GreenLocator\\GreenLocator.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\doman\\.nuget\\packages\\coverlet.collector\\3.2.0\\coverlet.collector.3.2.0.nupkg.sha512",
     "C:\\Users\\doman\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "F4e2HzX994EC4dEW3cxORiSlFxYkvc9p/wvyLVgzcoNbYJDHiITDOhx+NwVh62u1+geefipOMr28AVKVieMP1w==",
+  "dgSpecHash": "ec4jlOVAF96rY2aXn0MvqIEybH+cXrUHdSXTxEYnnZbPJh3strMfes90NS1jM2Pi317w1qEz+mNOUhdbulepwg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GLTests\\GLTests.csproj",
+  "projectFilePath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GLTests\\GLTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\doman\\.nuget\\packages\\autofixture\\4.17.0\\autofixture.4.17.0.nupkg.sha512",
     "C:\\Users\\doman\\.nuget\\packages\\autofixture.automoq\\4.17.0\\autofixture.automoq.4.17.0.nupkg.sha512",

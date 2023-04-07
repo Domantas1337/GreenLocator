@@ -11566,11 +11566,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GLTests\\GLTests.csproj",
+      "projectUniqueName": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GLTests\\GLTests.csproj",
       "projectName": "GLTests",
-      "projectPath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GLTests\\GLTests.csproj",
+      "projectPath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GLTests\\GLTests.csproj",
       "packagesPath": "C:\\Users\\doman\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GLTests\\obj\\",
+      "outputPath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GLTests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -11592,8 +11592,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GreenLocator\\GreenLocator.csproj": {
-              "projectPath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GreenLocator\\GreenLocator.csproj"
+            "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GreenLocator\\GreenLocator.csproj": {
+              "projectPath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GreenLocator\\GreenLocator.csproj"
             }
           }
         }

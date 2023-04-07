@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GreenLocator\\GreenLocator.csproj": {}
+    "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GreenLocator\\GreenLocator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GreenLocator\\GreenLocator.csproj": {
+    "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GreenLocator\\GreenLocator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GreenLocator\\GreenLocator.csproj",
+        "projectUniqueName": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GreenLocator\\GreenLocator.csproj",
         "projectName": "GreenLocator",
-        "projectPath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GreenLocator\\GreenLocator.csproj",
+        "projectPath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GreenLocator\\GreenLocator.csproj",
         "packagesPath": "C:\\Users\\doman\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui2\\GreenLocator\\GreenLocator\\obj\\",
+        "outputPath": "C:\\Users\\doman\\OneDrive\\Stalinis kompiuteris\\Ignui3\\GreenLocator\\GreenLocator\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
